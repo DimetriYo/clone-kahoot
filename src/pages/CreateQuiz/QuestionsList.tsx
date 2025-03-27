@@ -1,4 +1,8 @@
-export function QuestionsList() {
+import { DetailedHTMLProps, HTMLAttributes } from 'react'
+
+export function QuestionsList(
+  props: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>
+) {
   const { questions } = {
     questions: [
       {
@@ -15,7 +19,7 @@ export function QuestionsList() {
   }
 
   return (
-    <aside>
+    <aside {...props}>
       <h3>Questions</h3>
 
       <ul>

@@ -1,8 +1,8 @@
 import './App.css'
-import { CreateQuiz } from './pages/CreateQuiz'
+import { Player } from './pages/Player'
 
 function App() {
-  return <CreateQuiz />
+  return <Player />
 }
 
 export default App
