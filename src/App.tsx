@@ -1,8 +1,8 @@
 import './App.css'
-import { Player } from './pages/Player'
+import { Authorisation } from './pages/Authorisation'
 
 function App() {
-  return <Player />
+  return <Authorisation />
 }
 
 export default App
