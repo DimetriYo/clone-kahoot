@@ -1,4 +1,4 @@
-import { USERS } from '@/.db/users'
+import { USERS } from '@/db/users'
 
 export const getUserId = ({
   name: userName,
