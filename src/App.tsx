@@ -1,8 +1,8 @@
 import './App.css'
-import { Authorisation } from './pages/Authorisation'
+import { Router } from './Router'
 
 function App() {
-  return <Authorisation />
+  return <Router />
 }
 
 export default App

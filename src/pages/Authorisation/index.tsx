@@ -9,15 +9,21 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useForm } from 'react-hook-form'
+import { getUserId } from './api/getUserId'
 
 type UserForm = { name: string; password: string }
 const defaultValues = { name: '', password: '' }
 
-export function Authorisation() {
+export function Authorisation({
+  setUserId,
+}: {
+  setUserId: (newUserId: string) => void
+}) {
   const { register, handleSubmit } = useForm({ defaultValues })
 
   const onSubmit = (data: UserForm) => {
-    console.log(data)
+    const userId = getUserId(data)
+    setUserId(userId)
   }
 
   return (
