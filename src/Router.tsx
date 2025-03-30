@@ -1,13 +1,12 @@
-import { useEffect, useState } from 'react'
-import { Route, Routes } from 'react-router'
-import { Authorisation } from './pages/Authorisation'
-import { AdminModeChoose } from './pages/AdminModeChoose'
-import { CreateQuiz } from './pages/CreateQuiz'
-import { AdminGamePage } from './pages/AdminGamePage'
-import { Player } from './pages/Player'
-import { ADMIN_ID } from './constants'
+import { useEffect, useState } from "react"
+import { Route, Routes } from "react-router"
+import { Authorisation } from "./pages/Authorisation"
+import { AdminMainWindow } from "./pages/AdminMainWindow/AdminMainWindow"
+import { AdminQuizPage } from "./pages/AdminQuizPage"
+import { Player } from "./pages/Player"
+import { ADMIN_ID } from "./constants"
 
-const LS_USER_ID_KEY = 'userId'
+const LS_USER_ID_KEY = "userId"
 
 export function Router() {
   const [userId, setUserId] = useState<string>()
@@ -34,9 +33,8 @@ export function Router() {
     <Routes>
       {isAdminUser ? (
         <>
-          <Route index element={<AdminModeChoose />} />
-          <Route path="create" element={<CreateQuiz />} />
-          <Route path="game" element={<AdminGamePage />} />
+          <Route index element={<AdminMainWindow />} />
+          <Route path="/:quizId" element={<AdminQuizPage />} />
         </>
       ) : (
         <Route index element={<Player />} />
