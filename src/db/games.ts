@@ -1,4 +1,6 @@
-export const games = [
+import { Game } from '@/types/game'
+
+export const games: Game[] = [
   {
     id: 'MOCK-game-id-1',
     questionIds: ['first-question-id-1', 'first-question-id-2'],

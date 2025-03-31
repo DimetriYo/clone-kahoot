@@ -6,17 +6,17 @@ import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 export function AdminQuizPage() {
-  const { quizId } = useParams()
+  const { gameId } = useParams()
   const [selectedQuestionId, setSelectedQuestionId] = useState<string>()
 
-  if (!quizId) {
+  if (!gameId) {
     return null
   }
 
   return (
     <section className="grid grid-cols-[200px_1fr] h-full">
       <QuestionsList
-        quizId={quizId}
+        quizId={gameId}
         setSelectedQuestionId={setSelectedQuestionId}
         className="bg-blue-500 text-white p-4 h-full"
       >
@@ -25,7 +25,7 @@ export function AdminQuizPage() {
         </Link>
       </QuestionsList>
       <QuestionConstructor
-        gameId={quizId}
+        gameId={gameId}
         selecteQuestionId={selectedQuestionId}
         className="flex flex-col gap-10 p-4"
       />
