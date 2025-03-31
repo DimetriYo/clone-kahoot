@@ -2,21 +2,24 @@ import {
   DetailedHTMLProps,
   Dispatch,
   HTMLAttributes,
+  PropsWithChildren,
   SetStateAction,
   useEffect,
   useState,
-} from "react"
-import { getAllQuestions } from "./api/getAllQuestions"
-import { Question } from "@/types/question"
+} from 'react'
+import { getAllQuestions } from './api/getAllQuestions'
+import { Question } from '@/types/question'
 
 export function QuestionsList({
   quizId,
   setSelectedQuestionId,
+  children,
   ...props
-}: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> & {
-  quizId: string
-  setSelectedQuestionId: Dispatch<SetStateAction<string | undefined>>
-}) {
+}: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> &
+  PropsWithChildren & {
+    quizId: string
+    setSelectedQuestionId: Dispatch<SetStateAction<string | undefined>>
+  }) {
   const [questions, setQuestions] = useState<Question[]>([])
 
   useEffect(() => {
@@ -27,6 +30,7 @@ export function QuestionsList({
 
   return (
     <aside {...props}>
+      {children}
       <h3>Questions</h3>
 
       <ul className="w-full">
@@ -39,6 +43,9 @@ export function QuestionsList({
             {text}
           </li>
         ))}
+        <li onClick={() => setSelectedQuestionId(undefined)} className="w-full">
+          + Add new question
+        </li>
       </ul>
     </aside>
   )

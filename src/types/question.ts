@@ -1,7 +1,10 @@
-export type Question = {
+export type RawQuestion = {
   gameId: string
-  id: string
-  img: string
   text: string
   acceptedAnswers: string[]
+  img?: string
+}
+
+export type Question = RawQuestion & {
+  id: string
 }
