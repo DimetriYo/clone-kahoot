@@ -3,15 +3,14 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { DetailedHTMLProps, FormHTMLAttributes, useEffect } from 'react'
 import { useForm, SubmitHandler, useFieldArray } from 'react-hook-form'
-import { getQuestionById } from './api/getQuestionById'
 import { Question } from '@/types/question'
-import { patchUpdateQuestion } from './api/patchUpdateQuestion'
-import { postNewQuestion } from './api/postNewQuestion'
+import { useGetSingleQuestion } from './api/useGetSingleQuestion'
+import { usePatchUpdateQuestion } from './api/usePatchUpdateQuestion'
 
 type Props = DetailedHTMLProps<
   FormHTMLAttributes<HTMLFormElement>,
   HTMLFormElement
-> & { selecteQuestionId?: string; gameId: string }
+> & { selectedQuestionId: string }
 
 const defaultValues: Pick<Question, 'text'> & {
   answers: { answerText: string }[]
@@ -22,59 +21,41 @@ const defaultValues: Pick<Question, 'text'> & {
   answers: [{ answerText: '' }],
 }
 
-export function QuestionConstructor({
-  selecteQuestionId,
-  gameId,
-  ...props
-}: Props) {
+export function QuestionConstructor({ selectedQuestionId, ...props }: Props) {
+  const { mutate: updateQuestion } = usePatchUpdateQuestion()
+
   const { register, handleSubmit, control, reset } = useForm<
     typeof defaultValues
   >({
     defaultValues,
   })
 
+  const { data: question } = useGetSingleQuestion(
+    selectedQuestionId,
+    (question: Question) => ({
+      answers: question.acceptedAnswers.map((answer) => ({
+        answerText: answer,
+      })),
+      text: question.text,
+    })
+  )
+
   useEffect(() => {
-    if (selecteQuestionId) {
-      const newQuestion = getQuestionById(selecteQuestionId)
-
-      if (!newQuestion) {
-        return
-      }
-
-      const normalizedQuestion: typeof defaultValues = {
-        answers: newQuestion.acceptedAnswers.map((answer) => ({
-          answerText: answer,
-        })),
-        text: newQuestion.text,
-      }
-
-      reset(normalizedQuestion)
-    } else {
-      reset(defaultValues)
-    }
-  }, [selecteQuestionId])
-
-  const onSubmit: SubmitHandler<typeof defaultValues> = (data) => {
-    if (selecteQuestionId) {
-      patchUpdateQuestion({
-        acceptedAnswers: data.answers.map(({ answerText }) => answerText),
-        id: selecteQuestionId,
-        text: data.text,
-      })
-    } else {
-      postNewQuestion({
-        acceptedAnswers: data.answers.map(({ answerText }) => answerText),
-        gameId,
-        text: data.text,
-        img: data.img,
-      })
-    }
-  }
+    reset(question)
+  }, [question])
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'answers',
   })
+
+  const onSubmit: SubmitHandler<typeof defaultValues> = (data) => {
+    updateQuestion({
+      acceptedAnswers: data.answers.map(({ answerText }) => answerText),
+      id: selectedQuestionId,
+      text: data.text,
+    })
+  }
 
   return (
     <form {...props} onSubmit={handleSubmit(onSubmit)}>

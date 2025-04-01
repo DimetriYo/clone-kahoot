@@ -4,29 +4,25 @@ import {
   HTMLAttributes,
   PropsWithChildren,
   SetStateAction,
-  useEffect,
-  useState,
-} from 'react'
-import { getAllQuestions } from './api/getAllQuestions'
-import { Question } from '@/types/question'
+} from "react"
+import { useGetAllQuestions } from "./api/useGetAllQuestions"
+import { usePostNewQuestion } from "./api/usePostNewQuestion"
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
 
 export function QuestionsList({
-  quizId,
+  gameId,
   setSelectedQuestionId,
   children,
   ...props
 }: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> &
   PropsWithChildren & {
-    quizId: string
+    gameId: string
     setSelectedQuestionId: Dispatch<SetStateAction<string | undefined>>
   }) {
-  const [questions, setQuestions] = useState<Question[]>([])
+  const { data: questions } = useGetAllQuestions(gameId)
 
-  useEffect(() => {
-    const newQuestions = getAllQuestions(quizId)
-
-    setQuestions(newQuestions)
-  }, [])
+  const { mutate: addNewQuestion } = usePostNewQuestion(setSelectedQuestionId)
 
   return (
     <aside {...props}>
@@ -34,16 +30,26 @@ export function QuestionsList({
       <h3>Questions</h3>
 
       <ul className="w-full">
-        {questions.map(({ id, text }) => (
-          <li
-            key={id}
-            onClick={() => setSelectedQuestionId(id)}
-            className="w-full truncate"
-          >
-            {text}
-          </li>
-        ))}
-        <li onClick={() => setSelectedQuestionId(undefined)} className="w-full">
+        {questions &&
+          questions.map(({ id, text }) => (
+            <li
+              key={id}
+              onClick={() => setSelectedQuestionId(id)}
+              className="w-full truncate"
+            >
+              {text}
+            </li>
+          ))}
+        <li
+          onClick={() =>
+            addNewQuestion({
+              gameId,
+              text: "new question text",
+              acceptedAnswers: [""],
+            })
+          }
+          className={cn(buttonVariants(), "w-full cursor-pointer")}
+        >
           + Add new question
         </li>
       </ul>
