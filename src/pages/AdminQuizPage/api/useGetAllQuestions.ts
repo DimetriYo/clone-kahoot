@@ -1,10 +1,13 @@
+import { axiosInstance } from "@/constants"
+import { Question } from "@/types/question"
 import { useQuery } from "@tanstack/react-query"
-import { questions } from "@/db/questions"
 
 export const getAllQuestions = async (gameId: string) => {
-  return Promise.resolve(
-    questions.filter(({ gameId: dbGameId }) => dbGameId === gameId)
-  )
+  const questionsData = await axiosInstance.get<Question[]>(`/questions`, {
+    params: { gameId },
+  })
+
+  return questionsData.data
 }
 
 export const useGetAllQuestions = (gameId: string) =>

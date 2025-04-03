@@ -1,37 +1,24 @@
-import { useEffect, useState } from 'react'
-import { Route, Routes } from 'react-router'
-import { Authorisation } from './pages/Authorisation'
-import { AdminMainWindow } from './pages/AdminMainWindow/AdminMainWindow'
-import { AdminQuizPage } from './pages/AdminQuizPage'
-import { Player } from './pages/Player'
-import { ADMIN_ID } from './constants'
-
-const LS_USER_ID_KEY = 'userId'
+import { Route, Routes } from "react-router"
+import { Authorisation } from "./pages/Authorisation"
+import { AdminMainWindow } from "./pages/AdminMainWindow/AdminMainWindow"
+import { AdminQuizPage } from "./pages/AdminQuizPage"
+import { Player } from "./pages/Player"
+import { useUserAuthorize } from "./useUserAuthorize"
 
 export function Router() {
-  const [userId, setUserId] = useState<string>()
-
-  useEffect(() => {
-    const lsUserId = localStorage.getItem(LS_USER_ID_KEY)
-
-    if (userId) {
-      if (!lsUserId) {
-        localStorage.setItem(LS_USER_ID_KEY, userId)
-      }
-    } else if (lsUserId) {
-      setUserId(lsUserId)
-    }
-  }, [userId])
+  const { isAdmin, updateUserCredentials, userId } = useUserAuthorize()
 
   if (!userId) {
-    return <Authorisation setUserId={setUserId} />
+    return <Authorisation updateUserCredentials={updateUserCredentials} />
   }
 
-  const isAdminUser = userId === ADMIN_ID
+  if (isAdmin === null) {
+    return null
+  }
 
   return (
     <Routes>
-      {isAdminUser ? (
+      {isAdmin ? (
         <>
           <Route index element={<AdminMainWindow />} />
           <Route path="/:gameId" element={<AdminQuizPage />} />

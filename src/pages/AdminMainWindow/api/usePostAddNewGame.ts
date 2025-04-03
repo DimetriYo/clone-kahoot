@@ -1,13 +1,11 @@
-import { games } from '@/db/games'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { axiosInstance } from "@/constants"
+import { Game } from "@/types/game"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 export const postNewGame = async () => {
-  const gameId = crypto.randomUUID()
-  const newGame = { id: gameId, questionIds: [] }
+  const newGame: Game = await axiosInstance.post("/games")
 
-  games.push(newGame)
-
-  return Promise.resolve(newGame)
+  return newGame
 }
 
 export const usePostAddNewGame = ({
@@ -20,7 +18,7 @@ export const usePostAddNewGame = ({
   return useMutation({
     mutationFn: postNewGame,
     onSuccess: ({ id }) => {
-      queryClient.invalidateQueries({ queryKey: ['games'] })
+      queryClient.invalidateQueries({ queryKey: ["games"] })
       handleSuccess(id)
     },
   })

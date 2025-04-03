@@ -7,7 +7,10 @@ import { cn } from "@/lib/utils"
 
 export function AdminQuizPage() {
   const { gameId } = useParams()
-  const [selectedQuestionId, setSelectedQuestionId] = useState<string>()
+  const [selectedQuestionId, setSelectedQuestionId] = useState<{
+    id: string
+    number: number
+  }>()
 
   if (!gameId) {
     return null
@@ -26,6 +29,7 @@ export function AdminQuizPage() {
       </QuestionsList>
       {selectedQuestionId && (
         <QuestionConstructor
+          gameId={gameId}
           selectedQuestionId={selectedQuestionId}
           className="flex flex-col gap-10 p-4"
         />

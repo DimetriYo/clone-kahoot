@@ -1,19 +1,9 @@
-import { USERS } from '@/db/users'
+import { axiosInstance } from "@/constants"
 
-export const getUserId = ({
-  name: userName,
-  password: userPassword,
-}: {
-  name: string
-  password: string
-}) => {
-  const user = USERS.find(
-    ({ name, password }) => userName === name && userPassword === password
-  )
+type User = { id: string; name: string; password: string }
 
-  if (!user) {
-    throw new Error('No user with such a name and password')
-  }
+export const getUserId = async (props: { name: string; password: string }) => {
+  const userData = await axiosInstance.post<User>("/users", props)
 
-  return user.id
+  return userData.data.id
 }

@@ -1,13 +1,11 @@
+import { axiosInstance } from "@/constants"
 import { RawQuestion } from "@/types/question"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { questions } from "@/db/questions"
 
 export const postNewQuestion = async (rawQuestion: RawQuestion) => {
-  const newQuestion = { ...rawQuestion, id: crypto.randomUUID() }
+  const newQuestionData = await axiosInstance.post("/questions", rawQuestion)
 
-  questions.push(newQuestion)
-
-  return Promise.resolve(newQuestion)
+  return newQuestionData.data
 }
 
 export const usePostNewQuestion = (

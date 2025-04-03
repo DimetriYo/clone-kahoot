@@ -9,23 +9,21 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useForm } from "react-hook-form"
-import { getUserId } from "./api/getUserId"
 import { useNavigate } from "react-router"
 
 type UserForm = { name: string; password: string }
 const defaultValues = { name: "", password: "" }
 
 type Props = {
-  setUserId: (newUserId: string) => void
+  updateUserCredentials: (creds: { name: string; password: string }) => void
 }
 
-export function Authorisation({ setUserId }: Props) {
+export function Authorisation({ updateUserCredentials }: Props) {
   const { register, handleSubmit } = useForm({ defaultValues })
   const navigate = useNavigate()
 
-  const onSubmit = (data: UserForm) => {
-    const userId = getUserId(data)
-    setUserId(userId)
+  const onSubmit = async (data: UserForm) => {
+    updateUserCredentials(data)
     navigate("/")
   }
 

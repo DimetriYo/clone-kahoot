@@ -18,26 +18,30 @@ export function QuestionsList({
 }: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> &
   PropsWithChildren & {
     gameId: string
-    setSelectedQuestionId: Dispatch<SetStateAction<string | undefined>>
+    setSelectedQuestionId: Dispatch<
+      SetStateAction<{ id: string; number: number } | undefined>
+    >
   }) {
   const { data: questions } = useGetAllQuestions(gameId)
 
-  const { mutate: addNewQuestion } = usePostNewQuestion(setSelectedQuestionId)
+  const { mutate: addNewQuestion } = usePostNewQuestion((id: string) =>
+    setSelectedQuestionId({ id, number: (questions?.length || 0) + 1 })
+  )
 
   return (
     <aside {...props}>
       {children}
-      <h3>Questions</h3>
+      <h3 className="font-bold text-xl">Questions</h3>
 
       <ul className="w-full">
         {questions &&
-          questions.map(({ id, text }) => (
+          questions.map(({ id }, index) => (
             <li
               key={id}
-              onClick={() => setSelectedQuestionId(id)}
+              onClick={() => setSelectedQuestionId({ id, number: index + 1 })}
               className="w-full truncate"
             >
-              {text}
+              Question {index + 1}
             </li>
           ))}
         <li

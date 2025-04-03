@@ -1,13 +1,11 @@
-import { useQuery } from '@tanstack/react-query'
-import { questions } from '@/db/questions'
-import { Question } from '@/types/question'
+import { useQuery } from "@tanstack/react-query"
+import { Question } from "@/types/question"
+import { axiosInstance } from "@/constants"
 
 export const getQuestionById = async (questionId: string) => {
-  const question = questions.find(({ id }) => id === questionId)
-  if (!question)
-    throw Error(`Question with id ${questionId} has not been found!`)
+  const questionData = await axiosInstance.get(`/questions/${questionId}`)
 
-  return Promise.resolve(question)
+  return questionData.data
 }
 
 export const useGetSingleQuestion = <T = Question>(
@@ -16,7 +14,7 @@ export const useGetSingleQuestion = <T = Question>(
 ) =>
   useQuery({
     enabled: Boolean(questionId),
-    queryKey: ['question', questionId],
+    queryKey: ["question", questionId],
     queryFn: () => getQuestionById(questionId!),
     select,
   })

@@ -1,35 +1,22 @@
-import { questions } from '@/db/questions'
-import { Question } from '@/types/question'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { axiosInstance } from "@/constants"
+import { Question } from "@/types/question"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
-export const patchUpdateQuestion = async ({
-  id: questionId,
-  text,
-  acceptedAnswers,
-  img,
-}: Omit<Question, 'gameId'>) => {
-  const question = questions.find(({ id }) => id === questionId)
+export const patchUpdateQuestion = async ({ id, ...question }: Question) => {
+  const questionData = await axiosInstance.put(`/questions/${id}`, question)
 
-  if (!question) {
-    return Promise.reject()
-  }
-
-  question.img = img
-  question.text = text
-  question.acceptedAnswers = acceptedAnswers
-
-  return Promise.resolve(question)
+  return questionData.data
 }
 
 export const usePatchUpdateQuestion = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (updatedQuestion: Omit<Question, 'gameId'>) =>
+    mutationFn: (updatedQuestion: Question) =>
       patchUpdateQuestion(updatedQuestion),
     onSuccess: (updatedQuestion) => {
       queryClient.invalidateQueries({
-        queryKey: ['question', updatedQuestion.id],
+        queryKey: ["question", updatedQuestion.id],
       })
     },
   })

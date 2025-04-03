@@ -1,9 +1,12 @@
-import { useQuery } from '@tanstack/react-query'
-import { games } from '@/db/games'
+import { axiosInstance } from "@/constants"
+import { Game } from "@/types/game"
+import { useQuery } from "@tanstack/react-query"
 
-export const getAllGames = () => {
-  return games
+export const getAllGames = async () => {
+  const gamesData = await axiosInstance<Game[]>("/games")
+
+  return gamesData.data
 }
 
 export const useGetGames = () =>
-  useQuery({ queryKey: ['games'], queryFn: getAllGames })
+  useQuery({ queryKey: ["games"], queryFn: getAllGames })
