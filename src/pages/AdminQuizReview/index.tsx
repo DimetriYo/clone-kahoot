@@ -2,10 +2,10 @@ import { Link, useParams } from "react-router"
 import { QuestionConstructor } from "./QuestionConstructor"
 import { QuestionsList } from "./QuestionsList"
 import { useState } from "react"
-import { buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-export function AdminQuizPage() {
+export function AdminQuizReview() {
   const { gameId } = useParams()
   const [selectedQuestionId, setSelectedQuestionId] = useState<{
     id: string
@@ -27,13 +27,16 @@ export function AdminQuizPage() {
           Go to main page
         </Link>
       </QuestionsList>
-      {selectedQuestionId && (
-        <QuestionConstructor
-          gameId={gameId}
-          selectedQuestionId={selectedQuestionId}
-          className="flex flex-col gap-10 p-4"
-        />
-      )}
+      <div className="p-4 flex flex-col">
+        <Button className="self-end">Start this quiz</Button>
+        {selectedQuestionId && (
+          <QuestionConstructor
+            gameId={gameId}
+            selectedQuestionId={selectedQuestionId}
+            className="flex flex-col gap-10"
+          />
+        )}
+      </div>
     </section>
   )
 }

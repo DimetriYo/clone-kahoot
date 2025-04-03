@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router"
 import { Authorisation } from "./pages/Authorisation"
 import { AdminMainWindow } from "./pages/AdminMainWindow/AdminMainWindow"
-import { AdminQuizPage } from "./pages/AdminQuizPage"
+import { AdminQuizReview } from "./pages/AdminQuizReview"
 import { Player } from "./pages/Player"
 import { useUserAuthorize } from "./useUserAuthorize"
 
@@ -21,7 +21,7 @@ export function Router() {
       {isAdmin ? (
         <>
           <Route index element={<AdminMainWindow />} />
-          <Route path="/:gameId" element={<AdminQuizPage />} />
+          <Route path="/:gameId" element={<AdminQuizReview />} />
         </>
       ) : (
         <Route index element={<Player />} />
