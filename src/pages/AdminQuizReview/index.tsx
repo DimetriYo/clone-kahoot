@@ -2,7 +2,7 @@ import { Link, useParams } from "react-router"
 import { QuestionConstructor } from "./QuestionConstructor"
 import { QuestionsList } from "./QuestionsList"
 import { useState } from "react"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 export function AdminQuizReview() {
@@ -23,12 +23,17 @@ export function AdminQuizReview() {
         setSelectedQuestionId={setSelectedQuestionId}
         className="bg-blue-500 text-white p-4 h-full"
       >
-        <Link className={cn(buttonVariants(), "mb-4")} to="/">
+        <Link to="/" className={cn(buttonVariants(), "mb-4")}>
           Go to main page
         </Link>
       </QuestionsList>
       <div className="p-4 flex flex-col">
-        <Button className="self-end">Start this quiz</Button>
+        <Link
+          to={`/activeGame/${gameId}`}
+          className={cn(buttonVariants(), "self-end")}
+        >
+          Start this quiz
+        </Link>
         {selectedQuestionId && (
           <QuestionConstructor
             gameId={gameId}

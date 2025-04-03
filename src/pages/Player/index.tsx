@@ -1,15 +1,15 @@
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { useForm } from 'react-hook-form'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { QuestionView } from "@/components/ui/QuestionView"
+import { useForm } from "react-hook-form"
 
 type UserAnswer = { answer: string }
-const defaultValues = { answer: '' }
+const defaultValues = { answer: "" }
 
 export function Player() {
-  const { image, text } = {
-    image:
-      'https://assets.weforum.org/article/image/responsive_large_0ZUBmNNVLRCfn3NdU55nQ00UF64m2ObtcDS0grx02fA.jpg',
-    text: 'What is good? And what is bad?',
+  const { img, text } = {
+    img: "https://assets.weforum.org/article/image/responsive_large_0ZUBmNNVLRCfn3NdU55nQ00UF64m2ObtcDS0grx02fA.jpg",
+    text: "What is good? And what is bad?",
   }
 
   const {
@@ -26,22 +26,11 @@ export function Player() {
 
   return (
     <section className="flex flex-col items-center gap-4 p-4">
-      {image ? (
-        <figure className="flex flex-col items-center gap-4 rounded-lg">
-          <img
-            className="flex flex-col items-center gap-4 rounded-lg"
-            src={image}
-            alt={`Image illustrating the question: ${text}`}
-          />
-          <figcaption className="font-bold text-4xl">{text}</figcaption>
-        </figure>
-      ) : (
-        <p>{text}</p>
-      )}
+      <QuestionView text={text} img={img} />
       <Input
         placeholder="Type your answer here!"
         disabled={isSubmitted}
-        {...register('answer')}
+        {...register("answer")}
         type="text"
       />
       <Button

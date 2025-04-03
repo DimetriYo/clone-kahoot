@@ -10,18 +10,20 @@ import { usePostNewQuestion } from "./api/usePostNewQuestion"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 
-export function QuestionsList({
-  gameId,
-  setSelectedQuestionId,
-  children,
-  ...props
-}: DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> &
+type Props = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> &
   PropsWithChildren & {
     gameId: string
     setSelectedQuestionId: Dispatch<
       SetStateAction<{ id: string; number: number } | undefined>
     >
-  }) {
+  }
+
+export function QuestionsList({
+  gameId,
+  setSelectedQuestionId,
+  children,
+  ...props
+}: Props) {
   const { data: questions } = useGetAllQuestions(gameId)
 
   const { mutate: addNewQuestion } = usePostNewQuestion((id: string) =>
@@ -48,7 +50,7 @@ export function QuestionsList({
           onClick={() =>
             addNewQuestion({
               gameId,
-              text: "new question text",
+              text: "",
               acceptedAnswers: [""],
             })
           }

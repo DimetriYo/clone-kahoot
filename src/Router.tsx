@@ -4,6 +4,7 @@ import { AdminMainWindow } from "./pages/AdminMainWindow/AdminMainWindow"
 import { AdminQuizReview } from "./pages/AdminQuizReview"
 import { Player } from "./pages/Player"
 import { useUserAuthorize } from "./useUserAuthorize"
+import { AdminActiveQuiz } from "./pages/AdminActiveQuiz"
 
 export function Router() {
   const { isAdmin, updateUserCredentials, userId } = useUserAuthorize()
@@ -22,6 +23,7 @@ export function Router() {
         <>
           <Route index element={<AdminMainWindow />} />
           <Route path="/:gameId" element={<AdminQuizReview />} />
+          <Route path="/activeGame/:gameId" element={<AdminActiveQuiz />} />
         </>
       ) : (
         <Route index element={<Player />} />
