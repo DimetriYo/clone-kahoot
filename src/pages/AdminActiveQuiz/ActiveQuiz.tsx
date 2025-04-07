@@ -2,6 +2,7 @@ import { QuestionView } from "@/components/ui/QuestionView"
 import { useActiveGame } from "@/lib/useActiveGame"
 import { Players } from "@/components/ui/Players"
 import { Button } from "@/components/ui/button"
+import { useState } from "react"
 
 export function ActiveQuiz({ gameId }: { gameId: string }) {
   const { players, sendMessage, activeQuestion, allQuestions } = useActiveGame(
@@ -9,9 +10,27 @@ export function ActiveQuiz({ gameId }: { gameId: string }) {
     true
   )
 
+  const [isShownCopyConfirmation, setIsShownCopyConfirmation] = useState(false)
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(
+      String(new URL(gameId, window.location.origin))
+    )
+
+    setIsShownCopyConfirmation(true)
+
+    setTimeout(() => setIsShownCopyConfirmation(false), 3000)
+  }
+
   return (
     <section className="grid grid-cols-[200px_1fr] h-full grid-rows-[1fr_200px]">
-      <aside className="bg-orange-300 text-blue-600 p-4 h-full row-span-full">
+      <aside className="bg-orange-300 text-blue-600 p-4 h-full row-span-full flex flex-col gap-4">
+        <Button className="whitespace-normal h-auto" onClick={handleCopyLink}>
+          Copy link for the players
+        </Button>
+        {isShownCopyConfirmation &&
+          "Link for the players has been copied to your clipboard"}
+
         <h3 className="font-bold text-xl">Questions</h3>
 
         <ul className="w-full flex flex-col gap-2">

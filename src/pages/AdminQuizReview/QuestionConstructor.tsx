@@ -93,7 +93,9 @@ export function QuestionConstructor({
         </Button>
       </section>
 
-      <Input className={buttonVariants({ variant: "default" })} type="submit" />
+      <Button className={buttonVariants({ variant: "default" })} type="submit">
+        Add (update) question to the Quiz
+      </Button>
     </form>
   )
 }
