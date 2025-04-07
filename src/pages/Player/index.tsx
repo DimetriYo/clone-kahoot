@@ -9,17 +9,26 @@ type UserAnswer = { answer: string }
 const defaultValues = { answer: "" }
 
 export function Player() {
-  const { activeQuestion, players } = useActiveGame("")
+  const { activeQuestion, players, sendMessage } = useActiveGame("")
+
+  const sendAnswerQuestion = (answer: any) => {
+    const playerId = localStorage.getItem("userId")
+
+    sendMessage!({
+      type: "ANSWER_QUESTION",
+      payload: { questionId: activeQuestion?.id, answer, playerId },
+    })
+  }
 
   const {
     register,
     handleSubmit,
-    formState: { isSubmitted },
+    formState: { isSubmitSuccessful, errors },
     reset,
   } = useForm({ defaultValues })
 
   const handleSend = ({ answer }: UserAnswer) => {
-    console.log(answer)
+    sendAnswerQuestion(answer)
     reset()
   }
 
@@ -30,20 +39,31 @@ export function Player() {
           <QuestionView text={activeQuestion.text} img={activeQuestion.img} />
         )}
         <Input
+          aria-invalid={Boolean(errors.answer)}
           placeholder="Type your answer here!"
-          disabled={isSubmitted}
-          {...register("answer")}
+          disabled={isSubmitSuccessful}
+          {...register("answer", { required: "You can't submit empty answer" })}
           type="text"
         />
+        {errors.answer && (
+          <p className="text-red-300">
+            "Please enter your answer. It is not allowed to submit empty answer"
+          </p>
+        )}
+        <p>After submitting the answer you will not be able to change it.</p>
         <Button
-          disabled={isSubmitted}
+          disabled={isSubmitSuccessful}
           type="button"
           onClick={handleSubmit(handleSend)}
         >
           Send
         </Button>
       </section>
-      <Players players={players} className="bg-purple-400 p-4 min-h-52" />
+      <Players
+        activeQuestionId={activeQuestion?.id}
+        players={players}
+        className="bg-purple-400 p-4 min-h-52"
+      />
     </div>
   )
 }

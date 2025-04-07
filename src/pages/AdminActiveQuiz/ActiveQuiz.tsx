@@ -58,7 +58,11 @@ export function ActiveQuiz({ gameId }: { gameId: string }) {
           <QuestionView text={activeQuestion.text} img={activeQuestion.img} />
         )}
       </div>
-      <Players players={players} className="col-start-2 bg-purple-400 p-4" />
+      <Players
+        activeQuestionId={activeQuestion?.id}
+        players={players}
+        className="col-start-2 bg-purple-400 p-4"
+      />
     </section>
   )
 }
