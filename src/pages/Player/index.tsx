@@ -27,6 +27,10 @@ export function Player() {
     reset,
   } = useForm({ defaultValues })
 
+  // TODO: reset isSubmitSuccessful on activeQuestion change
+
+  // TODO: after all users gave answers show all answers
+
   const handleSend = ({ answer }: UserAnswer) => {
     sendAnswerQuestion(answer)
     reset()

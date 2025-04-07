@@ -61,10 +61,9 @@ export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
       )
     }
 
-    socket.onclose = () =>
-      socket.send(
-        JSON.stringify({ type: "PLAYER_DISCONNECTED", payload: userId })
-      )
+    socket.onclose = () => {
+      console.log("WebSocket closed")
+    }
   }, [])
 
   return {
