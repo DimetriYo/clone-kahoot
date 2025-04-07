@@ -1,16 +1,15 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Players } from "@/components/ui/Players"
 import { QuestionView } from "@/components/ui/QuestionView"
+import { useActiveGame } from "@/lib/useActiveGame"
 import { useForm } from "react-hook-form"
 
 type UserAnswer = { answer: string }
 const defaultValues = { answer: "" }
 
 export function Player() {
-  const { img, text } = {
-    img: "https://assets.weforum.org/article/image/responsive_large_0ZUBmNNVLRCfn3NdU55nQ00UF64m2ObtcDS0grx02fA.jpg",
-    text: "What is good? And what is bad?",
-  }
+  const { activeQuestion, players } = useActiveGame("")
 
   const {
     register,
@@ -25,21 +24,26 @@ export function Player() {
   }
 
   return (
-    <section className="flex flex-col items-center gap-4 p-4">
-      <QuestionView text={text} img={img} />
-      <Input
-        placeholder="Type your answer here!"
-        disabled={isSubmitted}
-        {...register("answer")}
-        type="text"
-      />
-      <Button
-        disabled={isSubmitted}
-        type="button"
-        onClick={handleSubmit(handleSend)}
-      >
-        Send
-      </Button>
-    </section>
+    <div className="flex flex-col h-full justify-between">
+      <section className="flex flex-col items-center gap-4 p-4">
+        {activeQuestion && (
+          <QuestionView text={activeQuestion.text} img={activeQuestion.img} />
+        )}
+        <Input
+          placeholder="Type your answer here!"
+          disabled={isSubmitted}
+          {...register("answer")}
+          type="text"
+        />
+        <Button
+          disabled={isSubmitted}
+          type="button"
+          onClick={handleSubmit(handleSend)}
+        >
+          Send
+        </Button>
+      </section>
+      <Players players={players} className="bg-purple-400 p-4 min-h-52" />
+    </div>
   )
 }

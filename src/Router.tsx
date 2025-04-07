@@ -4,7 +4,7 @@ import { AdminMainWindow } from "./pages/AdminMainWindow/AdminMainWindow"
 import { AdminQuizReview } from "./pages/AdminQuizReview"
 import { Player } from "./pages/Player"
 import { useUserAuthorize } from "./useUserAuthorize"
-import { AdminActiveQuiz } from "./pages/AdminActiveQuiz"
+import { ActiveQuezWithGameId } from "./pages/AdminActiveQuiz"
 
 export function Router() {
   const { isAdmin, updateUserCredentials, userId } = useUserAuthorize()
@@ -23,10 +23,23 @@ export function Router() {
         <>
           <Route index element={<AdminMainWindow />} />
           <Route path="/:gameId" element={<AdminQuizReview />} />
-          <Route path="/activeGame/:gameId" element={<AdminActiveQuiz />} />
+          <Route
+            path="/activeGame/:gameId"
+            element={<ActiveQuezWithGameId />}
+          />
         </>
       ) : (
-        <Route index element={<Player />} />
+        <>
+          <Route
+            index
+            element={
+              <h1 className="text-2xl font-semibold">
+                You need to follow the provided link, to join the game.
+              </h1>
+            }
+          />
+          <Route path="/:gameId" element={<Player />} />
+        </>
       )}
     </Routes>
   )

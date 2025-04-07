@@ -5,10 +5,10 @@ import {
   PropsWithChildren,
   SetStateAction,
 } from "react"
-import { useGetAllQuestions } from "./api/useGetAllQuestions"
 import { usePostNewQuestion } from "./api/usePostNewQuestion"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
+import { useGetAllQuestions } from "@/lib/useGetAllQuestions"
 
 type Props = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> &
   PropsWithChildren & {

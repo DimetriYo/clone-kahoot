@@ -8,7 +8,6 @@ const getUserData = async (creds: { name: string; password: string }) => {
     .post<{
       id: string
       name: string
-      password: string
     }>("/users/auth", creds)
     .catch((e) => {
       if (e.status === 404) {
@@ -21,10 +20,18 @@ const isUserExist = async (userId: string) => {
   try {
     await axiosInstance.get(`/users/${userId}`)
     return true
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     if (e.status === 404) return false
   }
+}
+
+const createNewUser = async (rawUser: { name: string; password: string }) => {
+  const newUser = await axiosInstance.post<{ id: string; name: string }>(
+    "/users",
+    rawUser
+  )
+
+  return newUser
 }
 
 const checkIsAdminUser = async (userId: string) =>
@@ -56,11 +63,11 @@ export const useUserAuthorize = () => {
     name: string
     password: string
   }) => {
-    const userData = await getUserData(creds)
+    let userData = await getUserData(creds)
 
     if (!userData) {
-      console.log("There is no such user")
-      return
+      userData = await createNewUser(creds)
+      console.log(userData)
     }
 
     const isAdminData = await checkIsAdminUser(userData.data.id)

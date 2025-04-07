@@ -10,18 +10,11 @@ export const getAllQuestions = async (gameId: string) => {
   return questionsData.data
 }
 
-export const useGetAllQuestions = (
-  gameId: string | undefined,
-  handleSuccess?: (id: string) => void
-) =>
+export const useGetAllQuestions = (gameId: string | undefined) =>
   useQuery({
     queryKey: ["questions", gameId],
     queryFn: async () => {
       const questions = await getAllQuestions(gameId!)
-
-      if (handleSuccess) {
-        handleSuccess(questions[0].id)
-      }
 
       return questions
     },
