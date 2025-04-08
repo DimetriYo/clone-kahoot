@@ -67,7 +67,6 @@ export const useUserAuthorize = () => {
 
     if (!userData) {
       userData = await createNewUser(creds)
-      console.log(userData)
     }
 
     const isAdminData = await checkIsAdminUser(userData.data.id)
