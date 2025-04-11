@@ -1,6 +1,8 @@
+import { LS_USER_ID_KEY } from "@/constants"
 import { Player } from "@/types/Player"
 import { Question } from "@/types/question"
 import { useEffect, useRef, useState } from "react"
+import { useNavigate } from "react-router"
 
 type ActiveGameQuestion = Pick<Question, "id" | "img" | "text">
 type ActiveGame = {
@@ -14,10 +16,20 @@ const isGameDataResponse = (
   resp:
     | { type: "GAME_DATA"; payload: ActiveGame }
     | { type: "FAULT"; payload: string }
+    | { type: "SHOW_ANSWERS"; payload: { questionId: string } }
 ): resp is { type: "GAME_DATA"; payload: ActiveGame } =>
   resp.type === "GAME_DATA"
 
+const isShowAnswersResponse = (
+  resp:
+    | { type: "GAME_DATA"; payload: ActiveGame }
+    | { type: "FAULT"; payload: string }
+    | { type: "SHOW_ANSWERS"; payload: { questionId: string } }
+): resp is { type: "SHOW_ANSWERS"; payload: { questionId: string } } =>
+  resp.type === "SHOW_ANSWERS"
+
 export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
+  const navigate = useNavigate()
   const [players, setPlayers] = useState<Player[]>([])
   const [allQuestions, setAllQuestions] = useState<ActiveGameQuestion[]>([])
   const [activeQuestion, setActiveQuestion] =
@@ -25,7 +37,8 @@ export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
   const sendMessageRef = useRef<
     ((obj: { type: string; payload: any }) => void) | null
   >(null)
-  const userId = localStorage.getItem("userId")
+  const [isShowAnswers, setIsShowAnswers] = useState(false)
+  const userId = localStorage.getItem(LS_USER_ID_KEY)
 
   useEffect(() => {
     const socket = new WebSocket(`${import.meta.env.VITE_DEV_API_WS}`)
@@ -47,6 +60,20 @@ export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
       const parsedMessage = JSON.parse(message.data) as
         | { type: "GAME_DATA"; payload: ActiveGame }
         | { type: "FAULT"; payload: string }
+        | { type: "SHOW_ANSWERS"; payload: { questionId: string } }
+        | { type: "SHOW_WINNERS"; payload: null }
+
+      if (parsedMessage.type === "SHOW_WINNERS") {
+        if (!isAdmin) navigate("winners", { relative: "path" })
+
+        return
+      }
+
+      if (isShowAnswersResponse(parsedMessage)) {
+        setIsShowAnswers((prev) => !prev)
+
+        return
+      }
 
       if (!isGameDataResponse(parsedMessage)) {
         return
@@ -66,10 +93,15 @@ export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
     }
   }, [])
 
+  useEffect(() => {
+    setIsShowAnswers(false)
+  }, [activeQuestion])
+
   return {
     players,
     sendMessage: sendMessageRef.current,
     allQuestions,
     activeQuestion,
+    isShowAnswers,
   }
 }

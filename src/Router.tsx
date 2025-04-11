@@ -5,6 +5,7 @@ import { AdminQuizReview } from "./pages/AdminQuizReview"
 import { Player } from "./pages/Player"
 import { useUserAuthorize } from "./useUserAuthorize"
 import { ActiveQuezWithGameId } from "./pages/AdminActiveQuiz"
+import { Winners } from "./pages/Winners"
 
 export function Router() {
   const { isAdmin, updateUserCredentials, userId } = useUserAuthorize()
@@ -24,7 +25,7 @@ export function Router() {
           <Route index element={<AdminMainWindow />} />
           <Route path="/:gameId" element={<AdminQuizReview />} />
           <Route
-            path="/activeGame/:gameId"
+            path="/:gameId/activeGame"
             element={<ActiveQuezWithGameId />}
           />
         </>
@@ -39,6 +40,7 @@ export function Router() {
             }
           />
           <Route path="/:gameId" element={<Player />} />
+          <Route path="/:gameId/winners" element={<Winners />} />
         </>
       )}
     </Routes>

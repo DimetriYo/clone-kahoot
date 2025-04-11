@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
-import { axiosInstance } from "./constants"
-
-const LS_USER_ID_KEY = "userId"
+import { axiosInstance, LS_USER_ID_KEY } from "./constants"
+import { checkIsAdminUser } from "./lib/utils"
 
 const getUserData = async (creds: { name: string; password: string }) => {
   return await axiosInstance
@@ -33,9 +32,6 @@ const createNewUser = async (rawUser: { name: string; password: string }) => {
 
   return newUser
 }
-
-const checkIsAdminUser = async (userId: string) =>
-  await axiosInstance.get(`/users/auth/${userId}`)
 
 export const useUserAuthorize = () => {
   const [userId, setUserId] = useState<string | null>(() =>

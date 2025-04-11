@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Players } from "@/components/ui/Players"
 import { QuestionView } from "@/components/ui/QuestionView"
+import { LS_USER_ID_KEY } from "@/constants"
 import { useActiveGame } from "@/lib/useActiveGame"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -10,11 +11,12 @@ type UserAnswer = { answer: string }
 const defaultValues = { answer: "" }
 
 export function Player() {
-  const { activeQuestion, players, sendMessage } = useActiveGame("")
+  const { activeQuestion, players, sendMessage, isShowAnswers } =
+    useActiveGame("")
   const [isQuestionAnswered, setIsQuestionAnswered] = useState(false)
 
   const sendAnswerQuestion = (answer: any) => {
-    const playerId = localStorage.getItem("userId")
+    const playerId = localStorage.getItem(LS_USER_ID_KEY)
 
     sendMessage!({
       type: "ANSWER_QUESTION",
@@ -29,14 +31,12 @@ export function Player() {
     reset,
   } = useForm({ defaultValues })
 
-  // TODO: after all users gave answers show all answers
-
   const handleSend = ({ answer }: UserAnswer) => {
     sendAnswerQuestion(answer)
   }
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId")
+    const userId = localStorage.getItem(LS_USER_ID_KEY)
     const currentPlayer = players.find(({ id }) => userId && userId === id)
 
     if (!currentPlayer) {
@@ -87,6 +87,7 @@ export function Player() {
         activeQuestionId={activeQuestion?.id}
         players={players}
         className="bg-purple-400 p-4 min-h-52"
+        isShowAnswers={isShowAnswers}
       />
     </div>
   )
