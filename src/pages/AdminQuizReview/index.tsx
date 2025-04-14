@@ -29,7 +29,7 @@ export function AdminQuizReview() {
       </QuestionsList>
       <div className="p-4 flex flex-col">
         <Link
-          to={`/${gameId}/activeGame`}
+          to={`/${gameId}/admin/activeGame`}
           className={cn(buttonVariants(), "self-end")}
         >
           Start this quiz

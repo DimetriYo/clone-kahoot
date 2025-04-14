@@ -8,5 +8,7 @@ export const getAllGames = async () => {
   return gamesData.data
 }
 
+// TODO: on user loggin in make server set cookies to identify user
+
 export const useGetGames = () =>
-  useQuery({ queryKey: ["games"], queryFn: getAllGames })
+  useQuery({ queryKey: ["games"], queryFn: () => getAllGames() })

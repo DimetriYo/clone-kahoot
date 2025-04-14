@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router"
 import { Authorisation } from "./pages/Authorisation"
-import { AdminMainWindow } from "./pages/AdminMainWindow/AdminMainWindow"
+import { MainWindow } from "./pages/MainWindow"
 import { AdminQuizReview } from "./pages/AdminQuizReview"
 import { Player } from "./pages/Player"
 import { useUserAuthorize } from "./useUserAuthorize"
@@ -8,41 +8,23 @@ import { ActiveQuezWithGameId } from "./pages/AdminActiveQuiz"
 import { Winners } from "./pages/Winners"
 
 export function Router() {
-  const { isAdmin, updateUserCredentials, userId } = useUserAuthorize()
+  const { updateUserCredentials, userId } = useUserAuthorize()
 
   if (!userId) {
     return <Authorisation updateUserCredentials={updateUserCredentials} />
   }
 
-  if (isAdmin === null) {
-    return null
-  }
-
   return (
     <Routes>
-      {isAdmin ? (
-        <>
-          <Route index element={<AdminMainWindow />} />
-          <Route path="/:gameId" element={<AdminQuizReview />} />
-          <Route
-            path="/:gameId/activeGame"
-            element={<ActiveQuezWithGameId />}
-          />
-        </>
-      ) : (
-        <>
-          <Route
-            index
-            element={
-              <h1 className="text-2xl font-semibold">
-                You need to follow the provided link, to join the game.
-              </h1>
-            }
-          />
-          <Route path="/:gameId" element={<Player />} />
-          <Route path="/:gameId/winners" element={<Winners />} />
-        </>
-      )}
+      <Route index element={<MainWindow />} />
+
+      <Route path="/:gameId/admin" element={<AdminQuizReview />} />
+      <Route
+        path="/:gameId/admin/activeGame"
+        element={<ActiveQuezWithGameId />}
+      />
+      <Route path="/:gameId/player" element={<Player />} />
+      <Route path="/:gameId/winners" element={<Winners />} />
     </Routes>
   )
 }

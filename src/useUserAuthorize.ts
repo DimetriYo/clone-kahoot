@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { axiosInstance, LS_USER_ID_KEY } from "./constants"
-import { checkIsAdminUser } from "./lib/utils"
 
 const getUserData = async (creds: { name: string; password: string }) => {
   return await axiosInstance
@@ -37,19 +36,16 @@ export const useUserAuthorize = () => {
   const [userId, setUserId] = useState<string | null>(() =>
     localStorage.getItem(LS_USER_ID_KEY)
   )
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null)
 
   useEffect(() => {
     const authUser = async () => {
       const isExist = Boolean(userId) && (await isUserExist(userId!))
+
       if (!isExist) {
         localStorage.removeItem(LS_USER_ID_KEY)
+
         return
       }
-
-      const isAdminData = await checkIsAdminUser(userId!)
-
-      setIsAdmin(isAdminData.data)
     }
 
     authUser()
@@ -65,13 +61,10 @@ export const useUserAuthorize = () => {
       userData = await createNewUser(creds)
     }
 
-    const isAdminData = await checkIsAdminUser(userData.data.id)
-
     localStorage.setItem(LS_USER_ID_KEY, userData.data.id)
 
     setUserId(userData.data.id)
-    setIsAdmin(isAdminData.data)
   }
 
-  return { updateUserCredentials, isAdmin, userId }
+  return { updateUserCredentials, userId }
 }

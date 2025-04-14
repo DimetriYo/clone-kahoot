@@ -20,7 +20,7 @@ type Props = {
 export function Authorisation({ updateUserCredentials }: Props) {
   const { register, handleSubmit } = useForm({ defaultValues })
 
-  const onSubmit = async (data: UserForm) => {
+  const onSubmit = (data: UserForm) => {
     updateUserCredentials(data)
   }
 
