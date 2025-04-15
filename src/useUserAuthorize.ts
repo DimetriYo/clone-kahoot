@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react"
-import { axiosInstance, LS_USER_ID_KEY } from "./constants"
+import { useEffect, useState } from 'react'
+import { axiosInstance, LS_USER_ID_KEY } from './constants'
 
 const getUserData = async (creds: { name: string; password: string }) => {
   return await axiosInstance
     .post<{
       id: string
       name: string
-    }>("/users/auth", creds)
+    }>('/users/auth', creds)
     .catch((e) => {
       if (e.status === 404) {
         return
@@ -25,7 +25,7 @@ const isUserExist = async (userId: string) => {
 
 const createNewUser = async (rawUser: { name: string; password: string }) => {
   const newUser = await axiosInstance.post<{ id: string; name: string }>(
-    "/users",
+    '/users',
     rawUser
   )
 

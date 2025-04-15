@@ -1,9 +1,11 @@
-import axios from "axios"
+import axios from 'axios'
+
+const DEV_BE_HOST = 'http://localhost:3000/api'
 
 export const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_DEV_API,
+  baseURL: DEV_BE_HOST,
   timeout: 1000,
   withCredentials: true,
 })
 
-export const LS_USER_ID_KEY = "userId"
+export const LS_USER_ID_KEY = 'userId'
