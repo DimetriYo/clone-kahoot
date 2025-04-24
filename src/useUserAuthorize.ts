@@ -51,19 +51,28 @@ export const useUserAuthorize = () => {
     authUser()
   }, [])
 
-  const updateUserCredentials = async (creds: {
-    name: string
-    password: string
-  }) => {
-    let userData = await getUserData(creds)
+  const updateUserCredentials = async (
+    creds: {
+      name: string
+      password: string
+    },
+    onSuccess?: (args?: any) => void
+  ) => {
+    try {
+      let userData = await getUserData(creds)
 
-    if (!userData) {
-      userData = await createNewUser(creds)
+      if (!userData) {
+        userData = await createNewUser(creds)
+      }
+
+      localStorage.setItem(LS_USER_ID_KEY, userData.data.id)
+
+      setUserId(userData.data.id)
+
+      if (onSuccess) onSuccess()
+    } catch (e: any) {
+      console.error(e)
     }
-
-    localStorage.setItem(LS_USER_ID_KEY, userData.data.id)
-
-    setUserId(userData.data.id)
   }
 
   return { updateUserCredentials, userId }

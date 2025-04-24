@@ -15,7 +15,10 @@ type UserForm = { name: string; password: string }
 const defaultValues = { name: '', password: '' }
 
 type Props = {
-  updateUserCredentials: (creds: { name: string; password: string }) => void
+  updateUserCredentials: (
+    creds: { name: string; password: string },
+    onSuccess?: (args: any) => void
+  ) => void
 }
 
 export function Authorisation({ updateUserCredentials }: Props) {
@@ -23,8 +26,7 @@ export function Authorisation({ updateUserCredentials }: Props) {
   const navigate = useNavigate()
 
   const onSubmit = (data: UserForm) => {
-    updateUserCredentials(data)
-    navigate('/clone-kahoot/home')
+    updateUserCredentials(data, () => navigate('/clone-kahoot/home'))
   }
 
   return (
