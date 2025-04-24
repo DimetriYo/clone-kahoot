@@ -13,7 +13,7 @@ export function MainWindow({ userId }: { userId: string | null }) {
 
   const { mutate: postNewGame } = usePostAddNewGame({
     handleSuccess: (id: string) => {
-      navigate(id)
+      navigate('/clone-kahoot/' + id)
     },
   })
 
@@ -33,7 +33,7 @@ export function MainWindow({ userId }: { userId: string | null }) {
 
   const handleLogoutClick = () => {
     localStorage.removeItem(LS_USER_ID_KEY)
-    navigate('/')
+    navigate('/clone-kahoot/')
   }
 
   return (

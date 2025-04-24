@@ -1,10 +1,10 @@
-import { LS_USER_ID_KEY } from "@/constants"
-import { Player } from "@/types/Player"
-import { Question } from "@/types/question"
-import { useEffect, useRef, useState } from "react"
-import { useNavigate } from "react-router"
+import { LS_USER_ID_KEY } from '@/constants'
+import { Player } from '@/types/Player'
+import { Question } from '@/types/question'
+import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router'
 
-type ActiveGameQuestion = Pick<Question, "id" | "img" | "text">
+type ActiveGameQuestion = Pick<Question, 'id' | 'img' | 'text'>
 type ActiveGame = {
   id: string
   players: Player[]
@@ -14,19 +14,19 @@ type ActiveGame = {
 
 const isGameDataResponse = (
   resp:
-    | { type: "GAME_DATA"; payload: ActiveGame }
-    | { type: "FAULT"; payload: string }
-    | { type: "SHOW_ANSWERS"; payload: { questionId: string } }
-): resp is { type: "GAME_DATA"; payload: ActiveGame } =>
-  resp.type === "GAME_DATA"
+    | { type: 'GAME_DATA'; payload: ActiveGame }
+    | { type: 'FAULT'; payload: string }
+    | { type: 'SHOW_ANSWERS'; payload: { questionId: string } }
+): resp is { type: 'GAME_DATA'; payload: ActiveGame } =>
+  resp.type === 'GAME_DATA'
 
 const isShowAnswersResponse = (
   resp:
-    | { type: "GAME_DATA"; payload: ActiveGame }
-    | { type: "FAULT"; payload: string }
-    | { type: "SHOW_ANSWERS"; payload: { questionId: string } }
-): resp is { type: "SHOW_ANSWERS"; payload: { questionId: string } } =>
-  resp.type === "SHOW_ANSWERS"
+    | { type: 'GAME_DATA'; payload: ActiveGame }
+    | { type: 'FAULT'; payload: string }
+    | { type: 'SHOW_ANSWERS'; payload: { questionId: string } }
+): resp is { type: 'SHOW_ANSWERS'; payload: { questionId: string } } =>
+  resp.type === 'SHOW_ANSWERS'
 
 export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
   const navigate = useNavigate()
@@ -48,23 +48,23 @@ export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
 
     socket.onopen = async () => {
       if (isAdmin) {
-        socket.send(JSON.stringify({ type: "START_GAME", payload: { gameId } }))
+        socket.send(JSON.stringify({ type: 'START_GAME', payload: { gameId } }))
       } else {
         socket.send(
-          JSON.stringify({ type: "PLAYER_CONNECTED", payload: { userId } })
+          JSON.stringify({ type: 'PLAYER_CONNECTED', payload: { userId } })
         )
       }
     }
 
     socket.onmessage = (message: MessageEvent<string>) => {
       const parsedMessage = JSON.parse(message.data) as
-        | { type: "GAME_DATA"; payload: ActiveGame }
-        | { type: "FAULT"; payload: string }
-        | { type: "SHOW_ANSWERS"; payload: { questionId: string } }
-        | { type: "SHOW_WINNERS"; payload: null }
+        | { type: 'GAME_DATA'; payload: ActiveGame }
+        | { type: 'FAULT'; payload: string }
+        | { type: 'SHOW_ANSWERS'; payload: { questionId: string } }
+        | { type: 'SHOW_WINNERS'; payload: null }
 
-      if (parsedMessage.type === "SHOW_WINNERS") {
-        if (!isAdmin) navigate("winners", { relative: "path" })
+      if (parsedMessage.type === 'SHOW_WINNERS') {
+        if (!isAdmin) navigate('winners', { relative: 'path' })
 
         return
       }
@@ -89,7 +89,7 @@ export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
     }
 
     socket.onclose = () => {
-      console.log("WebSocket closed")
+      console.log('WebSocket closed')
     }
   }, [])
 

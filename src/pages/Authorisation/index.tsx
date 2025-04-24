@@ -24,7 +24,7 @@ export function Authorisation({ updateUserCredentials }: Props) {
 
   const onSubmit = (data: UserForm) => {
     updateUserCredentials(data)
-    navigate('home')
+    navigate('/clone-kahoot/home')
   }
 
   return (

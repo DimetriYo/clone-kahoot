@@ -12,21 +12,23 @@ export function Router() {
 
   return (
     <Routes>
-      <Route
-        index
-        element={
-          <Authorisation updateUserCredentials={updateUserCredentials} />
-        }
-      />
-      <Route path="/home" element={<MainWindow userId={userId} />} />
+      <Route path="/clone-kahoot">
+        <Route
+          index
+          element={
+            <Authorisation updateUserCredentials={updateUserCredentials} />
+          }
+        />
+        <Route path="home" element={<MainWindow userId={userId} />} />
 
-      <Route path="/:gameId/admin" element={<AdminQuizReview />} />
-      <Route
-        path="/:gameId/admin/activeGame"
-        element={<ActiveQuezWithGameId />}
-      />
-      <Route path="/:gameId/player" element={<Player />} />
-      <Route path="/:gameId/winners" element={<Winners />} />
+        <Route path=":gameId/admin" element={<AdminQuizReview />} />
+        <Route
+          path=":gameId/admin/activeGame"
+          element={<ActiveQuezWithGameId />}
+        />
+        <Route path=":gameId/player" element={<Player />} />
+        <Route path=":gameId/winners" element={<Winners />} />
+      </Route>
     </Routes>
   )
 }
