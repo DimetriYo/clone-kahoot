@@ -1,11 +1,11 @@
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Link, useNavigate } from 'react-router'
-import { useGetGames } from './api/useGetGames'
-import { usePostAddNewGame } from './api/usePostAddNewGame'
-import { useForm } from 'react-hook-form'
-import { Input } from '@/components/ui/input'
-import { LS_USER_ID_KEY } from '@/constants'
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { Link, useNavigate } from "react-router"
+import { useGetGames } from "./api/useGetGames"
+import { usePostAddNewGame } from "./api/usePostAddNewGame"
+import { useForm } from "react-hook-form"
+import { Input } from "@/components/ui/input"
+import { LS_USER_ID_KEY } from "@/constants"
 
 export function MainWindow({ userId }: { userId: string | null }) {
   const navigate = useNavigate()
@@ -13,7 +13,7 @@ export function MainWindow({ userId }: { userId: string | null }) {
 
   const { mutate: postNewGame } = usePostAddNewGame({
     handleSuccess: (id: string) => {
-      navigate('/clone-kahoot/' + id)
+      navigate("/clone-kahoot/" + id)
     },
   })
 
@@ -21,10 +21,10 @@ export function MainWindow({ userId }: { userId: string | null }) {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ defaultValues: { gameId: '' } })
+  } = useForm({ defaultValues: { gameId: "" } })
 
   const onJoinGameSubmit = ({ gameId }: { gameId: string }) => {
-    console.log('Join game: ' + gameId)
+    console.log("Join game: " + gameId)
   }
 
   const handleMakeNewGameClick = async () => {
@@ -33,7 +33,7 @@ export function MainWindow({ userId }: { userId: string | null }) {
 
   const handleLogoutClick = () => {
     localStorage.removeItem(LS_USER_ID_KEY)
-    navigate('/clone-kahoot/')
+    navigate("/clone-kahoot/")
   }
 
   return (
@@ -45,7 +45,7 @@ export function MainWindow({ userId }: { userId: string | null }) {
       <Card className="p-6">
         <form onSubmit={handleSubmit(onJoinGameSubmit)} className="flex gap-2">
           <Input
-            {...register('gameId', { required: 'Enter valid game ID' })}
+            {...register("gameId", { required: "Enter valid game ID" })}
             aria-invalid={Boolean(errors.gameId)}
           />
           <Button type="submit">Join game</Button>
@@ -64,12 +64,12 @@ export function MainWindow({ userId }: { userId: string | null }) {
           <ul>
             {games?.map(({ id }, index) => (
               <li key={id}>
-                <Link to={'../' + id + '/admin'}>Quiz #{index + 1}</Link>
+                <Link to={"../" + id + "/admin"}>Quiz #{index + 1}</Link>
               </li>
             ))}
           </ul>
         ) : (
-          <p>You haven't create any games yet.</p>
+          <p>You haven't created any games yet.</p>
         )}
       </Card>
     </div>
