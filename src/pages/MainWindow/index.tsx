@@ -5,11 +5,11 @@ import { useGetGames } from "./api/useGetGames"
 import { usePostAddNewGame } from "./api/usePostAddNewGame"
 import { useForm } from "react-hook-form"
 import { Input } from "@/components/ui/input"
-import { LS_USER_ID_KEY } from "@/constants"
+import { axiosInstance, LS_USER_ID_KEY } from "@/constants"
 
-export function MainWindow({ userId }: { userId: string | null }) {
+export function MainWindow() {
   const navigate = useNavigate()
-  const { data: games } = useGetGames(userId)
+  const { data: games } = useGetGames()
 
   const { mutate: postNewGame } = usePostAddNewGame({
     handleSuccess: (id: string) => {
@@ -23,8 +23,10 @@ export function MainWindow({ userId }: { userId: string | null }) {
     formState: { errors },
   } = useForm({ defaultValues: { gameId: "" } })
 
-  const onJoinGameSubmit = ({ gameId }: { gameId: string }) => {
-    console.log("Join game: " + gameId)
+  const onJoinGameSubmit = async ({ gameId }: { gameId: string }) => {
+    const isExist = await axiosInstance.get(`/active-game/${gameId}`) // TODO: adjust work of the request
+
+    console.log("Join game: " + isExist)
   }
 
   const handleMakeNewGameClick = async () => {
@@ -50,6 +52,7 @@ export function MainWindow({ userId }: { userId: string | null }) {
           />
           <Button type="submit">Join game</Button>
         </form>
+
         {Boolean(errors.gameId) && (
           <p className="text-red-300">{errors.gameId?.message}</p>
         )}
