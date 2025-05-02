@@ -27,7 +27,7 @@ export function Router() {
           element={<ActiveQuezWithGameId />}
         />
         <Route path=":gameId/player" element={<Player />} />
-        <Route path=":gameId/winners" element={<Winners />} />
+        <Route path=":gameId/player/winners" element={<Winners />} />
       </Route>
     </Routes>
   )

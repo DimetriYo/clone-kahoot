@@ -93,7 +93,19 @@ export function ActiveQuiz({ gameId }: { gameId: string }) {
       </aside>
 
       {isShowWinners ? (
-        <WinnersTable className="col-start-2 row-span-full" players={players} />
+        <>
+          <WinnersTable
+            className="col-start-2 row-span-full"
+            players={players}
+          />
+          <Button
+            onClick={() =>
+              sendMessage && sendMessage({ type: "END_GAME", payload: null })
+            }
+          >
+            Stop Quiz
+          </Button>
+        </>
       ) : (
         <>
           <div className="p-4">

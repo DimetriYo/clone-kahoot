@@ -24,9 +24,16 @@ export function MainWindow() {
   } = useForm({ defaultValues: { gameId: "" } })
 
   const onJoinGameSubmit = async ({ gameId }: { gameId: string }) => {
-    const isExist = await axiosInstance.get(`/active-game/${gameId}`) // TODO: adjust work of the request
+    try {
+      await axiosInstance.get(`/active-game/${gameId}`)
 
-    console.log("Join game: " + isExist)
+      navigate(`/clone-kahoot/${gameId}/player`)
+    } catch (e) {
+      console.log(
+        `======\nNo game with id ${gameId} is currently running\n=======`
+      )
+      console.error(e)
+    }
   }
 
   const handleMakeNewGameClick = async () => {
@@ -47,7 +54,7 @@ export function MainWindow() {
       <Card className="p-6">
         <form onSubmit={handleSubmit(onJoinGameSubmit)} className="flex gap-2">
           <Input
-            {...register("gameId", { required: "Enter valid game ID" })}
+            {...register("gameId", { required: "Enter valid game link" })}
             aria-invalid={Boolean(errors.gameId)}
           />
           <Button type="submit">Join game</Button>
