@@ -3,7 +3,9 @@ import { Question } from "@/types/question"
 import { axiosInstance } from "@/constants"
 
 export const getQuestionById = async (questionId: string) => {
-  const questionData = await axiosInstance.get(`/questions/${questionId}`)
+  const questionData = await axiosInstance.get<Question>(
+    `/questions/${questionId}`
+  )
 
   return questionData.data
 }

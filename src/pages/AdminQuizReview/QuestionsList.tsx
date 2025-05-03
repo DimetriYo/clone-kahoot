@@ -26,9 +26,9 @@ export function QuestionsList({
 }: Props) {
   const { data: questions } = useGetAllQuestions(gameId)
 
-  const { mutate: addNewQuestion } = usePostNewQuestion((id: string) =>
+  const { mutate: addNewQuestion } = usePostNewQuestion((id: string) => {
     setSelectedQuestionId({ id, number: (questions?.length || 0) + 1 })
-  )
+  })
 
   return (
     <aside {...props}>

@@ -13,7 +13,7 @@ export function MainWindow() {
 
   const { mutate: postNewGame } = usePostAddNewGame({
     handleSuccess: (id: string) => {
-      navigate("/clone-kahoot/" + id)
+      navigate(`/clone-kahoot/${id}/admin`)
     },
   })
 

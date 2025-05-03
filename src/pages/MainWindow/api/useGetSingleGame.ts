@@ -1,8 +1,9 @@
 import { axiosInstance } from "@/constants"
+import { Game } from "@/types/game"
 import { useQuery } from "@tanstack/react-query"
 
 const getSingleGame = (gameId: string) => {
-  const game = axiosInstance.get(`/games/${gameId}`)
+  const game = axiosInstance.get<Game>(`/games/${gameId}`)
 
   return game
 }

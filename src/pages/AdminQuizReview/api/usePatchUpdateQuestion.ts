@@ -3,7 +3,10 @@ import { Question } from "@/types/question"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 export const patchUpdateQuestion = async ({ id, ...question }: Question) => {
-  const questionData = await axiosInstance.put(`/questions/${id}`, question)
+  const questionData = await axiosInstance.put<Question>(
+    `/questions/${id}`,
+    question
+  )
 
   return questionData.data
 }

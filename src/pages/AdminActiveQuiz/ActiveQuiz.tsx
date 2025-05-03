@@ -13,9 +13,7 @@ export function ActiveQuiz({ gameId }: { gameId: string }) {
   const [isShowWinners, setIsShowWinners] = useState(false)
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(
-      String(new URL(gameId, window.location.origin))
-    )
+    navigator.clipboard.writeText(gameId)
 
     setIsShownCopyConfirmation(true)
 
@@ -89,23 +87,19 @@ export function ActiveQuiz({ gameId }: { gameId: string }) {
           >
             End Quiz and show winners
           </Button>
-        </div>
-      </aside>
-
-      {isShowWinners ? (
-        <>
-          <WinnersTable
-            className="col-start-2 row-span-full"
-            players={players}
-          />
           <Button
+            disabled={!isShowWinners}
             onClick={() =>
               sendMessage && sendMessage({ type: "END_GAME", payload: null })
             }
           >
             Stop Quiz
           </Button>
-        </>
+        </div>
+      </aside>
+
+      {isShowWinners ? (
+        <WinnersTable className="col-start-2 row-span-full" players={players} />
       ) : (
         <>
           <div className="p-4">

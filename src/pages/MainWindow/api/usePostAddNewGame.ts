@@ -3,7 +3,7 @@ import { Game } from "@/types/game"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 export const postNewGame = async () => {
-  const newGame: Game = await axiosInstance.post("/games")
+  const newGame = await axiosInstance.post<Game>("/games")
 
   return newGame
 }
@@ -17,7 +17,7 @@ export const usePostAddNewGame = ({
 
   return useMutation({
     mutationFn: postNewGame,
-    onSuccess: ({ id }) => {
+    onSuccess: ({ data: { id } }) => {
       queryClient.invalidateQueries({ queryKey: ["games"] })
       handleSuccess(id)
     },
