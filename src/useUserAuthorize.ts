@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { axiosInstance, LS_USER_ID_KEY } from './constants'
+import { toast } from 'react-toastify'
 
 const getUserData = async (creds: { name: string; password: string }) => {
   return await axiosInstance
@@ -71,7 +72,7 @@ export const useUserAuthorize = () => {
 
       if (onSuccess) onSuccess()
     } catch (e: any) {
-      console.error(e)
+      toast(e.response?.data)
     }
   }
 
