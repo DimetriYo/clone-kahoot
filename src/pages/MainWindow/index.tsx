@@ -1,11 +1,12 @@
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Link, useNavigate } from "react-router"
-import { useGetGames } from "./api/useGetGames"
-import { usePostAddNewGame } from "./api/usePostAddNewGame"
-import { useForm } from "react-hook-form"
-import { Input } from "@/components/ui/input"
-import { axiosInstance, LS_USER_ID_KEY } from "@/constants"
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Link, useNavigate } from 'react-router'
+import { useGetGames } from './api/useGetGames'
+import { usePostAddNewGame } from './api/usePostAddNewGame'
+import { useForm } from 'react-hook-form'
+import { Input } from '@/components/ui/input'
+import { axiosInstance, LS_USER_ID_KEY } from '@/constants'
+import { toast } from 'react-toastify'
 
 export function MainWindow() {
   const navigate = useNavigate()
@@ -21,18 +22,15 @@ export function MainWindow() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ defaultValues: { gameId: "" } })
+  } = useForm({ defaultValues: { gameId: '' } })
 
   const onJoinGameSubmit = async ({ gameId }: { gameId: string }) => {
     try {
       await axiosInstance.get(`/active-game/${gameId}`)
 
       navigate(`/clone-kahoot/${gameId}/player`)
-    } catch (e) {
-      console.log(
-        `======\nNo game with id ${gameId} is currently running\n=======`
-      )
-      console.error(e)
+    } catch (e: any) {
+      toast(e.response.data)
     }
   }
 
@@ -42,7 +40,7 @@ export function MainWindow() {
 
   const handleLogoutClick = () => {
     localStorage.removeItem(LS_USER_ID_KEY)
-    navigate("/clone-kahoot/")
+    navigate('/clone-kahoot/')
   }
 
   return (
@@ -54,7 +52,7 @@ export function MainWindow() {
       <Card className="p-6">
         <form onSubmit={handleSubmit(onJoinGameSubmit)} className="flex gap-2">
           <Input
-            {...register("gameId", { required: "Enter valid game link" })}
+            {...register('gameId', { required: 'Enter valid game link' })}
             aria-invalid={Boolean(errors.gameId)}
           />
           <Button type="submit">Join game</Button>
@@ -74,7 +72,7 @@ export function MainWindow() {
           <ul>
             {games?.map(({ id }, index) => (
               <li key={id}>
-                <Link to={"../" + id + "/admin"}>Quiz #{index + 1}</Link>
+                <Link to={'../' + id + '/admin'}>Quiz #{index + 1}</Link>
               </li>
             ))}
           </ul>

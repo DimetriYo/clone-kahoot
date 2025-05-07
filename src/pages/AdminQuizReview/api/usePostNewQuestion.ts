@@ -1,50 +1,26 @@
-import { axiosInstance } from "@/constants"
-import { AcceptedAnswer } from "@/types/AcceptedAnswer"
-import { Question, RawQuestion } from "@/types/question"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { axiosInstance } from '@/constants'
+import { Question, RawQuestion } from '@/types/question'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-export const postNewQuestion = async (
-  rawQuestion: Omit<RawQuestion, "acceptedAnswers">
-) => {
+export const postNewQuestion = async (rawQuestion: RawQuestion) => {
   const newQuestionData = await axiosInstance.post<Question>(
-    "/questions",
+    '/questions',
     rawQuestion
   )
 
   return newQuestionData.data
 }
 
-const postNewAcceptedAnswers = async (
-  rawAcceptedAnswers: Omit<AcceptedAnswer, "id">[]
-) => {
-  const acceptedAnswersCtr = await axiosInstance.post<AcceptedAnswer[]>(
-    "/accepted-answers",
-    rawAcceptedAnswers
-  )
+const createNewQuestion = async (
+  rawQuestion: RawQuestion
+): Promise<Question> => {
+  const question = await postNewQuestion({
+    gameId: rawQuestion.gameId,
+    text: rawQuestion.text,
+    img: rawQuestion.img,
+  })
 
-  return acceptedAnswersCtr.data
-}
-
-const getNewAcceptedAnswers = async (questionId: string) => {
-  const query = new URLSearchParams({ questionId })
-  const acceptedAnswers = await axiosInstance.post<AcceptedAnswer[]>(
-    `/accepted-answers?${query.toString()}`
-  )
-
-  return acceptedAnswers.data
-}
-
-const createNewQuestion = async ({
-  acceptedAnswers,
-  ...rawQuestion
-}: RawQuestion): Promise<Question> => {
-  const question = await postNewQuestion(rawQuestion)
-  await postNewAcceptedAnswers(
-    acceptedAnswers.map((text) => ({ questionId: question.id, text }))
-  )
-  const answers = await getNewAcceptedAnswers(question.id)
-
-  return { ...question, acceptedAnswers: answers.map(({ text }) => text) }
+  return question
 }
 
 export const usePostNewQuestion = (
@@ -56,7 +32,7 @@ export const usePostNewQuestion = (
     mutationFn: (rawQuestion: RawQuestion) => createNewQuestion(rawQuestion),
     onSuccess: (newQuestion) => {
       queryClient.invalidateQueries({
-        queryKey: ["questions", newQuestion.gameId],
+        queryKey: ['questions', newQuestion.gameId],
       })
 
       if (handleSuccess) {

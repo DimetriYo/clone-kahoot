@@ -1,7 +1,6 @@
 export type RawQuestion = {
   gameId: string
   text: string
-  acceptedAnswers: string[]
   img?: string
 }
 

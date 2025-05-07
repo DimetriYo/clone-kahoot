@@ -3,3 +3,5 @@ export type AcceptedAnswer = {
   questionId: string
   text: string
 }
+
+export type RawAcceptedAnswer = Omit<AcceptedAnswer, 'id'>

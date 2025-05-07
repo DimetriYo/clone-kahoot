@@ -4,15 +4,16 @@ import {
   HTMLAttributes,
   PropsWithChildren,
   SetStateAction,
-} from "react"
-import { usePostNewQuestion } from "./api/usePostNewQuestion"
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-import { useGetAllQuestions } from "@/lib/useGetAllQuestions"
+} from 'react'
+import { usePostNewQuestion } from './api/usePostNewQuestion'
+import { Button } from '@/components/ui/button'
+import { useGetAllQuestions } from '@/lib/useGetAllQuestions'
+import { cn } from '@/lib/utils'
 
 type Props = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> &
   PropsWithChildren & {
     gameId: string
+    selectedQuestionId: string | undefined
     setSelectedQuestionId: Dispatch<
       SetStateAction<{ id: string; number: number } | undefined>
     >
@@ -20,6 +21,7 @@ type Props = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> &
 
 export function QuestionsList({
   gameId,
+  selectedQuestionId,
   setSelectedQuestionId,
   children,
   ...props
@@ -33,7 +35,19 @@ export function QuestionsList({
   return (
     <aside {...props}>
       {children}
-      <h3 className="font-bold text-xl">Questions</h3>
+      <Button
+        onClick={() =>
+          addNewQuestion({
+            gameId,
+            text: '',
+          })
+        }
+        className="w-full cursor-pointer"
+      >
+        + Add new question
+      </Button>
+
+      <h3 className="font-bold text-xl mt-4">Questions</h3>
 
       <ul className="w-full">
         {questions &&
@@ -41,23 +55,14 @@ export function QuestionsList({
             <li
               key={id}
               onClick={() => setSelectedQuestionId({ id, number: index + 1 })}
-              className="w-full truncate"
+              className={cn(
+                'w-full truncate hover:cursor-pointer p-1 hover:ring-1 ring-amber-300 rounded-md transition',
+                selectedQuestionId === id && 'bg-amber-200'
+              )}
             >
               Question {index + 1}
             </li>
           ))}
-        <li
-          onClick={() =>
-            addNewQuestion({
-              gameId,
-              text: "",
-              acceptedAnswers: [""],
-            })
-          }
-          className={cn(buttonVariants(), "w-full cursor-pointer")}
-        >
-          + Add new question
-        </li>
       </ul>
     </aside>
   )

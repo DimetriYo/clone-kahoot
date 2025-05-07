@@ -38,6 +38,7 @@ export function Authorisation({ updateUserCredentials }: Props) {
             Please, enter your nickname and password
           </CardDescription>
         </CardHeader>
+
         <CardContent>
           <form
             className="max-w-3xs flex flex-col gap-4 p-4"
