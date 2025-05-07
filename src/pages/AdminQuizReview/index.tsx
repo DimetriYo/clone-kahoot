@@ -36,6 +36,7 @@ export function AdminQuizReview() {
         </Link>
         {selectedQuestion && (
           <QuestionConstructor
+            setSelectedQuestion={setSelectedQuestion}
             gameId={gameId}
             selectedQuestion={selectedQuestion}
             className="flex flex-col gap-10"

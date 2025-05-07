@@ -4,6 +4,7 @@ export type RawQuestion = {
   img?: string
 }
 
-export type Question = RawQuestion & {
+export type Question = Omit<RawQuestion, 'img'> & {
   id: string
+  img: string | null
 }
