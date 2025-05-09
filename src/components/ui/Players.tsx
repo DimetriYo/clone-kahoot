@@ -5,30 +5,31 @@ import { DetailedHTMLProps, HTMLAttributes } from "react"
 type Props = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> & {
   players: Player[]
   activeQuestionId?: string
-  isShowAnswers: boolean
+  playerAnswers:
+    | {
+        playerId: string
+        playerAnswer: string | null
+      }[]
+    | null
 }
 
 export function Players({
   players,
   activeQuestionId,
-  isShowAnswers,
+  playerAnswers,
   ...props
 }: Props) {
   return (
     <section {...props}>
-      {isShowAnswers && activeQuestionId ? (
+      {playerAnswers && activeQuestionId ? (
         <ul className="flex flex-wrap">
-          {players.map(({ name, answers, id }) => {
-            const answer = answers.find(
-              ({ questionId }) => activeQuestionId === questionId
-            )
-
+          {playerAnswers.map(({ playerAnswer, playerId }) => {
             return (
               <li
-                key={id}
+                key={playerId}
                 className={cn(
                   "rounded-full px-2 border-2 border-current bg-red-300",
-                  answer?.isCorrect && "bg-green-400"
+                  playerAnswer?.isCorrect && "bg-green-400" // TODO: add isCorrect, name, and color fields from backend
                 )}
               >
                 <span className="font-semibold">{name}:</span> {answer?.text}

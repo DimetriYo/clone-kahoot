@@ -7,7 +7,7 @@ import { WinnersTable } from "@/components/ui/WinnersTable"
 import { cn } from "@/lib/utils"
 
 export function ActiveQuiz({ gameId }: { gameId: string }) {
-  const { players, sendMessage, activeQuestion, allQuestions, isShowAnswers } =
+  const { players, sendMessage, activeQuestion, allQuestions, playerAnswers } =
     useActiveGame(gameId, true)
 
   const [isShownCopyConfirmation, setIsShownCopyConfirmation] = useState(false)
@@ -119,7 +119,7 @@ export function ActiveQuiz({ gameId }: { gameId: string }) {
             activeQuestionId={activeQuestion?.id}
             players={players}
             className="col-start-2 col-span-1 bg-purple-400 p-4"
-            isShowAnswers={isShowAnswers}
+            playerAnswers={playerAnswers}
           />
         </>
       )}

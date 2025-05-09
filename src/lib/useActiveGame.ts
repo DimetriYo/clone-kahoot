@@ -11,21 +11,22 @@ type ActiveGame = {
   allQuestions: Question[]
   activeQuestionId: string
 }
+type GameData = { type: "GAME_DATA"; payload: ActiveGame }
+type Fault = { type: "FAULT"; payload: string }
+type ShowAnswers = {
+  type: "SHOW_ANSWERS"
+  payload: {
+    playerId: string
+    playerAnswer: string | null
+  }[]
+}
+type ShowWinners = { type: "SHOW_WINNERS"; payload: null }
+type ParsedMessage = GameData | Fault | ShowAnswers | ShowWinners
 
-const isGameDataResponse = (
-  resp:
-    | { type: "GAME_DATA"; payload: ActiveGame }
-    | { type: "FAULT"; payload: string }
-    | { type: "SHOW_ANSWERS"; payload: { questionId: string } }
-): resp is { type: "GAME_DATA"; payload: ActiveGame } =>
+const isGameDataResponse = (resp: ParsedMessage): resp is GameData =>
   resp.type === "GAME_DATA"
 
-const isShowAnswersResponse = (
-  resp:
-    | { type: "GAME_DATA"; payload: ActiveGame }
-    | { type: "FAULT"; payload: string }
-    | { type: "SHOW_ANSWERS"; payload: { questionId: string } }
-): resp is { type: "SHOW_ANSWERS"; payload: { questionId: string } } =>
+const isShowAnswersResponse = (resp: ParsedMessage): resp is ShowAnswers =>
   resp.type === "SHOW_ANSWERS"
 
 export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
@@ -37,7 +38,13 @@ export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
   const sendMessageRef = useRef<
     ((obj: { type: string; payload: any }) => void) | null
   >(null)
-  const [isShowAnswers, setIsShowAnswers] = useState(false)
+  const [playerAnswers, setPlayerAnswers] = useState<
+    | {
+        playerId: string
+        playerAnswer: string | null
+      }[]
+    | null
+  >(null)
   const userId = localStorage.getItem(LS_USER_ID_KEY)
 
   useEffect(() => {
@@ -57,11 +64,7 @@ export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
     }
 
     socket.onmessage = (message: MessageEvent<string>) => {
-      const parsedMessage = JSON.parse(message.data) as
-        | { type: "GAME_DATA"; payload: ActiveGame }
-        | { type: "FAULT"; payload: string }
-        | { type: "SHOW_ANSWERS"; payload: { questionId: string } }
-        | { type: "SHOW_WINNERS"; payload: null }
+      const parsedMessage = JSON.parse(message.data) as ParsedMessage
 
       if (parsedMessage.type === "SHOW_WINNERS") {
         if (!isAdmin) navigate("winners", { relative: "path" })
@@ -70,7 +73,7 @@ export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
       }
 
       if (isShowAnswersResponse(parsedMessage)) {
-        setIsShowAnswers((prev) => !prev)
+        setPlayerAnswers(parsedMessage.payload)
 
         return
       }
@@ -94,7 +97,7 @@ export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
   }, [])
 
   useEffect(() => {
-    setIsShowAnswers(false)
+    setPlayerAnswers(null)
   }, [activeQuestion])
 
   return {
@@ -102,6 +105,6 @@ export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
     sendMessage: sendMessageRef.current,
     allQuestions,
     activeQuestion,
-    isShowAnswers,
+    playerAnswers,
   }
 }
