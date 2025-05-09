@@ -80,7 +80,6 @@ export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
       }
 
       const { payload } = parsedMessage
-      console.log(payload)
 
       setPlayers(payload.players)
       setAllQuestions(payload.allQuestions)

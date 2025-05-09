@@ -1,9 +1,10 @@
 import { QuestionView } from "@/components/ui/QuestionView"
 import { useActiveGame } from "@/lib/useActiveGame"
 import { Players } from "@/components/ui/Players"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { useState } from "react"
 import { WinnersTable } from "@/components/ui/WinnersTable"
+import { cn } from "@/lib/utils"
 
 export function ActiveQuiz({ gameId }: { gameId: string }) {
   const { players, sendMessage, activeQuestion, allQuestions, isShowAnswers } =
@@ -41,6 +42,10 @@ export function ActiveQuiz({ gameId }: { gameId: string }) {
     setIsShowWinners(true)
   }
 
+  const handleStopQuiz = () => {
+    if (sendMessage) sendMessage({ type: "END_GAME", payload: null })
+  }
+
   return (
     <section className="grid grid-cols-[200px_1fr_200px] h-full grid-rows-[1fr_200px]">
       <aside className="bg-orange-300 text-blue-600 p-4 h-full row-span-full flex flex-col gap-4">
@@ -57,7 +62,11 @@ export function ActiveQuiz({ gameId }: { gameId: string }) {
                       payload: { qusetionId: id },
                     })
                   }
-                  className="w-full truncate"
+                  className={cn(
+                    "w-full truncate",
+                    activeQuestion?.id === id &&
+                      buttonVariants({ variant: "secondary" })
+                  )}
                 >
                   Question {index + 1}
                 </Button>
@@ -87,12 +96,7 @@ export function ActiveQuiz({ gameId }: { gameId: string }) {
           >
             End Quiz and show winners
           </Button>
-          <Button
-            disabled={!isShowWinners}
-            onClick={() =>
-              sendMessage && sendMessage({ type: "END_GAME", payload: null })
-            }
-          >
+          <Button disabled={!isShowWinners} onClick={handleStopQuiz}>
             Stop Quiz
           </Button>
         </div>
