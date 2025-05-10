@@ -1,4 +1,4 @@
-import ImgWithPlaceholder from "@/lib/ImgWithPlaceholder"
+import ImgWithPlaceholder from "@/components/ui/ImgWithPlaceholder"
 import { Question } from "@/types/question"
 
 export function QuestionView({ text, img }: Pick<Question, "img" | "text">) {

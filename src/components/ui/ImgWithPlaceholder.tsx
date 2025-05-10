@@ -1,5 +1,5 @@
 import { memo, useEffect, useState } from "react"
-import { cn } from "./utils"
+import { cn } from "@/lib/utils"
 
 function ImgWithPlaceholder(
   props: React.DetailedHTMLProps<

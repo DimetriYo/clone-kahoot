@@ -11,7 +11,7 @@ type UserAnswer = { answer: string }
 const defaultValues = { answer: "" }
 
 export function Player() {
-  const { activeQuestion, players, sendMessage, isShowAnswers } =
+  const { activeQuestion, players, sendMessage, playerAnswers } =
     useActiveGame("")
   const [isQuestionAnswered, setIsQuestionAnswered] = useState(false)
 
@@ -87,7 +87,7 @@ export function Player() {
         activeQuestionId={activeQuestion?.id}
         players={players}
         className="bg-purple-400 p-4 min-h-52"
-        isShowAnswers={isShowAnswers}
+        playerAnswers={playerAnswers}
       />
     </div>
   )

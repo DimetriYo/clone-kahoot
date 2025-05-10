@@ -1,5 +1,6 @@
 import { LS_USER_ID_KEY } from "@/constants"
 import { Player } from "@/types/Player"
+import { PlayerAnswer } from "@/types/PlayerAnswer"
 import { Question } from "@/types/question"
 import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router"
@@ -15,10 +16,7 @@ type GameData = { type: "GAME_DATA"; payload: ActiveGame }
 type Fault = { type: "FAULT"; payload: string }
 type ShowAnswers = {
   type: "SHOW_ANSWERS"
-  payload: {
-    playerId: string
-    playerAnswer: string | null
-  }[]
+  payload: PlayerAnswer[]
 }
 type ShowWinners = { type: "SHOW_WINNERS"; payload: null }
 type ParsedMessage = GameData | Fault | ShowAnswers | ShowWinners
@@ -39,11 +37,7 @@ export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
     ((obj: { type: string; payload: any }) => void) | null
   >(null)
   const [playerAnswers, setPlayerAnswers] = useState<
-    | {
-        playerId: string
-        playerAnswer: string | null
-      }[]
-    | null
+    ShowAnswers["payload"] | null
   >(null)
   const userId = localStorage.getItem(LS_USER_ID_KEY)
 

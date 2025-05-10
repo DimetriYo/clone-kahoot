@@ -5,6 +5,7 @@ import { Button, buttonVariants } from "@/components/ui/button"
 import { useState } from "react"
 import { WinnersTable } from "@/components/ui/WinnersTable"
 import { cn } from "@/lib/utils"
+import { Link } from "react-router"
 
 export function ActiveQuiz({ gameId }: { gameId: string }) {
   const { players, sendMessage, activeQuestion, allQuestions, playerAnswers } =
@@ -96,9 +97,16 @@ export function ActiveQuiz({ gameId }: { gameId: string }) {
           >
             End Quiz and show winners
           </Button>
+
           <Button disabled={!isShowWinners} onClick={handleStopQuiz}>
             Stop Quiz
           </Button>
+
+          {isShowWinners && (
+            <Link className={cn(buttonVariants())} to="/clone-kahoot/home">
+              Home
+            </Link>
+          )}
         </div>
       </aside>
 

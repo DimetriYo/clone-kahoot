@@ -4,4 +4,4 @@ export type AcceptedAnswer = {
   text: string
 }
 
-export type RawAcceptedAnswer = Omit<AcceptedAnswer, 'id'>
+export type RawAcceptedAnswer = Omit<AcceptedAnswer, "id">

@@ -9,7 +9,7 @@ import { usePatchUpdateQuestion } from "./api/usePatchUpdateQuestion"
 import { useGetAcceptedAnswersByQuestionId } from "./api/useGetAcceptedAnswersByQuestionId"
 import { usePutUpdateAcceptedAnswers } from "./api/usePutUpdateAcceptedAnswers"
 import { useDeleteQuestion } from "./api/useDeleteQuestion"
-import ImgWithPlaceholder from "@/lib/ImgWithPlaceholder"
+import ImgWithPlaceholder from "@/components/ui/ImgWithPlaceholder"
 
 type Props = DetailedHTMLProps<
   FormHTMLAttributes<HTMLFormElement>,

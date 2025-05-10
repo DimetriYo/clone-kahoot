@@ -1,16 +1,12 @@
 import { cn } from "@/lib/utils"
 import { Player } from "@/types/Player"
+import { PlayerAnswer } from "@/types/PlayerAnswer"
 import { DetailedHTMLProps, HTMLAttributes } from "react"
 
 type Props = DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> & {
   players: Player[]
   activeQuestionId?: string
-  playerAnswers:
-    | {
-        playerId: string
-        playerAnswer: string | null
-      }[]
-    | null
+  playerAnswers: PlayerAnswer[] | null
 }
 
 export function Players({
@@ -23,16 +19,17 @@ export function Players({
     <section {...props}>
       {playerAnswers && activeQuestionId ? (
         <ul className="flex flex-wrap">
-          {playerAnswers.map(({ playerAnswer, playerId }) => {
+          {playerAnswers.map(({ playerAnswer, playerId, playerName }) => {
             return (
               <li
                 key={playerId}
                 className={cn(
                   "rounded-full px-2 border-2 border-current bg-red-300",
-                  playerAnswer?.isCorrect && "bg-green-400" // TODO: add isCorrect, name, and color fields from backend
+                  playerAnswer?.isCorrect && "bg-green-400"
                 )}
               >
-                <span className="font-semibold">{name}:</span> {answer?.text}
+                <span className="font-semibold">{playerName}:</span>{" "}
+                {playerAnswer?.text || "No answer"}
               </li>
             )
           })}
