@@ -2,6 +2,7 @@ import { axiosInstance } from "@/constants"
 import { AcceptedAnswer } from "@/types/AcceptedAnswer"
 import { Question } from "@/types/question"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { AxiosError } from "axios"
 import { toast } from "react-toastify"
 
 const deleteQuestion = async (questionId: string) => {
@@ -37,7 +38,11 @@ export const useDeleteQuestion = (handleSuccess: () => void) => {
       handleSuccess()
     },
     onError: (e) => {
-      toast(e.message)
+      if (!(e instanceof AxiosError)) {
+        toast(e.message)
+      } else {
+        toast(String(e.response?.data))
+      }
     },
   })
 }

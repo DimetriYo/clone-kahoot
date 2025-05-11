@@ -1,11 +1,19 @@
 import { axiosInstance } from "@/constants"
 import { Game } from "@/types/game"
 import { useQuery } from "@tanstack/react-query"
+import { AxiosError } from "axios"
+import { toast } from "react-toastify"
 
-const getSingleGame = (gameId: string) => {
-  const game = axiosInstance.get<Game>(`/games/${gameId}`)
+const getSingleGame = async (gameId: string) => {
+  try {
+    return await axiosInstance.get<Game>(`/games/${gameId}`)
+  } catch (e) {
+    if (!(e instanceof AxiosError)) {
+      throw e
+    }
 
-  return game
+    toast(String(e.response?.data || e.message))
+  }
 }
 
 export const useGetSingleGame = (gameId: string) =>

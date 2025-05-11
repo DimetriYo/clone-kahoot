@@ -66,10 +66,13 @@ export function QuestionConstructor({
 
   const { data: question } = useGetSingleQuestion(
     selectedQuestion.id,
-    (question: Question) => ({
-      text: question.text,
-      img: question.img ? question.img : "",
-    })
+    (question: Question | undefined) =>
+      question
+        ? {
+            text: question.text,
+            img: question.img ? question.img : "",
+          }
+        : undefined
   )
 
   const { data: answers } = useGetAcceptedAnswersByQuestionId(

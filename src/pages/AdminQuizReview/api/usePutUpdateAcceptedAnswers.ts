@@ -1,6 +1,8 @@
-import { axiosInstance } from '@/constants'
-import { AcceptedAnswer, RawAcceptedAnswer } from '@/types/AcceptedAnswer'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { axiosInstance } from "@/constants"
+import { AcceptedAnswer, RawAcceptedAnswer } from "@/types/AcceptedAnswer"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { AxiosError } from "axios"
+import { toast } from "react-toastify"
 
 export const putUpdateAcceptedAnswers = async (
   questionId: string,
@@ -24,8 +26,15 @@ export const usePutUpdateAcceptedAnswers = (questionId: string) => {
       putUpdateAcceptedAnswers(questionId, updatedAcceptedAnswers),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['accepted-answers', questionId],
+        queryKey: ["accepted-answers", questionId],
       })
+    },
+    onError: (e) => {
+      if (!(e instanceof AxiosError)) {
+        toast(e.message)
+      } else {
+        toast(String(e.response?.data))
+      }
     },
   })
 }

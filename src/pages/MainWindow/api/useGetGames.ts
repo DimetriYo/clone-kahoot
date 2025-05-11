@@ -1,6 +1,7 @@
 import { axiosInstance } from "@/constants"
 import { Game } from "@/types/game"
 import { useQuery } from "@tanstack/react-query"
+import { AxiosError } from "axios"
 import { toast } from "react-toastify"
 
 export const getAllUserGames = async () => {
@@ -8,8 +9,12 @@ export const getAllUserGames = async () => {
     const gamesData = await axiosInstance.get<Game[]>(`/games`)
 
     return gamesData.data
-  } catch (e) {
-    toast(String(e))
+  } catch (e: any) {
+    if (!(e instanceof AxiosError)) {
+      throw e
+    }
+
+    toast(String(e.response?.data || e.message))
   }
 }
 
