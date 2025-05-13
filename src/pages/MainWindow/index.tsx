@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import { Input } from '@/components/ui/input'
 import { axiosInstance, LS_USER_ID_KEY } from '@/constants'
 import { toast } from 'react-toastify'
+import { UserAvatar } from '@/components/ui/UserAvatar'
 
 export function MainWindow() {
   const navigate = useNavigate()
@@ -45,9 +46,10 @@ export function MainWindow() {
 
   return (
     <div className="relative w-full h-full flex flex-col gap-4 items-center justify-center">
-      <Button className="fixed top-4 right-4" onClick={handleLogoutClick}>
-        Logout
-      </Button>
+      <div className="fixed opacity-55 hover:opacity-100 transition top-4 right-4 flex flex-col gap-4">
+        <UserAvatar className="static" />
+        <Button onClick={handleLogoutClick}>Logout</Button>
+      </div>
 
       <Card className="p-6">
         <form onSubmit={handleSubmit(onJoinGameSubmit)} className="flex gap-2">
