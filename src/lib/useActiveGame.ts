@@ -1,31 +1,31 @@
-import { LS_USER_ID_KEY } from "@/constants"
-import { Player } from "@/types/Player"
-import { PlayerAnswer } from "@/types/PlayerAnswer"
-import { Question } from "@/types/question"
-import { useEffect, useRef, useState } from "react"
-import { useNavigate } from "react-router"
+import { DEV_WS_HOST, LS_USER_ID_KEY, PROD_WS_HOST } from '@/constants'
+import { Player } from '@/types/Player'
+import { PlayerAnswer } from '@/types/PlayerAnswer'
+import { Question } from '@/types/question'
+import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router'
 
-type ActiveGameQuestion = Pick<Question, "id" | "img" | "text">
+type ActiveGameQuestion = Pick<Question, 'id' | 'img' | 'text'>
 type ActiveGame = {
   id: string
   players: Player[]
   allQuestions: Question[]
   activeQuestionId: string
 }
-type GameData = { type: "GAME_DATA"; payload: ActiveGame }
-type Fault = { type: "FAULT"; payload: string }
+type GameData = { type: 'GAME_DATA'; payload: ActiveGame }
+type Fault = { type: 'FAULT'; payload: string }
 type ShowAnswers = {
-  type: "SHOW_ANSWERS"
+  type: 'SHOW_ANSWERS'
   payload: PlayerAnswer[]
 }
-type ShowWinners = { type: "SHOW_WINNERS"; payload: null }
+type ShowWinners = { type: 'SHOW_WINNERS'; payload: null }
 type ParsedMessage = GameData | Fault | ShowAnswers | ShowWinners
 
 const isGameDataResponse = (resp: ParsedMessage): resp is GameData =>
-  resp.type === "GAME_DATA"
+  resp.type === 'GAME_DATA'
 
 const isShowAnswersResponse = (resp: ParsedMessage): resp is ShowAnswers =>
-  resp.type === "SHOW_ANSWERS"
+  resp.type === 'SHOW_ANSWERS'
 
 export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
   const navigate = useNavigate()
@@ -37,22 +37,24 @@ export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
     ((obj: { type: string; payload: any }) => void) | null
   >(null)
   const [playerAnswers, setPlayerAnswers] = useState<
-    ShowAnswers["payload"] | null
+    ShowAnswers['payload'] | null
   >(null)
   const userId = localStorage.getItem(LS_USER_ID_KEY)
 
   useEffect(() => {
-    const socket = new WebSocket(`${import.meta.env.VITE_DEV_API_WS}`)
+    const socket = new WebSocket(
+      import.meta.env.PROD ? PROD_WS_HOST : DEV_WS_HOST
+    )
 
     sendMessageRef.current = (obj: { type: string; payload: any }) =>
       socket.send(JSON.stringify(obj))
 
     socket.onopen = async () => {
       if (isAdmin) {
-        socket.send(JSON.stringify({ type: "START_GAME", payload: { gameId } }))
+        socket.send(JSON.stringify({ type: 'START_GAME', payload: { gameId } }))
       } else {
         socket.send(
-          JSON.stringify({ type: "PLAYER_CONNECTED", payload: { userId } })
+          JSON.stringify({ type: 'PLAYER_CONNECTED', payload: { userId } })
         )
       }
     }
@@ -60,8 +62,8 @@ export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
     socket.onmessage = (message: MessageEvent<string>) => {
       const parsedMessage = JSON.parse(message.data) as ParsedMessage
 
-      if (parsedMessage.type === "SHOW_WINNERS") {
-        if (!isAdmin) navigate("winners", { relative: "path" })
+      if (parsedMessage.type === 'SHOW_WINNERS') {
+        if (!isAdmin) navigate('winners', { relative: 'path' })
 
         return
       }
@@ -86,7 +88,7 @@ export const useActiveGame = (gameId: string, isAdmin: boolean = false) => {
     }
 
     socket.onclose = () => {
-      console.log("WebSocket closed")
+      console.log('WebSocket closed')
     }
   }, [])
 
