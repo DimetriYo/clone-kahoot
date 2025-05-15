@@ -1,11 +1,11 @@
-import { axiosInstance } from "@/constants"
-import { Game } from "@/types/game"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { AxiosError } from "axios"
-import { toast } from "react-toastify"
+import { axiosInstance } from '@/constants'
+import { Game } from '@/types/game'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+import { toast } from 'react-toastify'
 
 export const postNewGame = async () => {
-  const newGame = await axiosInstance.post<Game>("/games")
+  const newGame = await axiosInstance.post<Game>('/games')
 
   return newGame
 }
@@ -20,14 +20,14 @@ export const usePostAddNewGame = ({
   return useMutation({
     mutationFn: postNewGame,
     onSuccess: ({ data: { id } }) => {
-      queryClient.invalidateQueries({ queryKey: ["games"] })
+      queryClient.invalidateQueries({ queryKey: ['games'] })
       handleSuccess(id)
     },
     onError: (e) => {
-      if (!(e instanceof AxiosError)) {
-        toast(e.message)
-      } else {
+      if (e instanceof AxiosError) {
         toast(String(e.response?.data))
+      } else {
+        toast(e.message)
       }
     },
   })
