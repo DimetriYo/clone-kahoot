@@ -1,7 +1,7 @@
-import ImgWithPlaceholder from "@/components/ui/ImgWithPlaceholder"
-import { Question } from "@/types/question"
+import ImgWithPlaceholder from '@/components/ui/ImgWithPlaceholder'
+import { Question } from '@/types/Question'
 
-export function QuestionView({ text, img }: Pick<Question, "img" | "text">) {
+export function QuestionView({ text, img }: Pick<Question, 'img' | 'text'>) {
   return (
     <>
       {img && (

@@ -5,7 +5,12 @@ import { useGetGames } from './api/useGetGames'
 import { usePostAddNewGame } from './api/usePostAddNewGame'
 import { useForm } from 'react-hook-form'
 import { Input } from '@/components/ui/input'
-import { axiosInstance, LS_USER_ID_KEY } from '@/constants'
+import {
+  AUTH_COOKIE_NAME,
+  axiosInstance,
+  DOMAIN,
+  LS_USER_ID_KEY,
+} from '@/constants'
 import { toast } from 'react-toastify'
 import { UserAvatar } from '@/components/ui/UserAvatar'
 
@@ -41,6 +46,16 @@ export function MainWindow() {
 
   const handleLogoutClick = () => {
     localStorage.removeItem(LS_USER_ID_KEY)
+
+    document.cookie =
+      AUTH_COOKIE_NAME +
+      '=; Max-Age=-1; path=' +
+      '/' +
+      ';' +
+      ' domain=' +
+      DOMAIN +
+      ';'
+
     navigate('/clone-kahoot/')
   }
 

@@ -1,9 +1,9 @@
-import { Link, useParams } from "react-router"
-import { QuestionConstructor } from "./QuestionConstructor"
-import { QuestionsList } from "./QuestionsList"
-import { useState } from "react"
-import { Button, buttonVariants } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { Link, useParams } from 'react-router'
+import { QuestionConstructor } from './QuestionConstructor'
+import { QuestionsList } from './QuestionsList'
+import { useState } from 'react'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 export function AdminQuizReview() {
   const { gameId } = useParams()
@@ -26,15 +26,15 @@ export function AdminQuizReview() {
         setSelectedQuestionId={setSelectedQuestion}
         className="bg-blue-500 text-white p-4 h-full"
       >
-        <Link to="/clone-kahoot/home" className={cn(buttonVariants(), "mb-4")}>
+        <Link to="/clone-kahoot/home" className={cn(buttonVariants(), 'mb-4')}>
           Go to main page
         </Link>
       </QuestionsList>
       <div className="p-4 flex flex-col">
         {isReadyToStartGame ? (
           <Link
-            to={`/clone-kahoot/${gameId}/admin/activeGame`} // TODO: test correctness of transitions
-            className={cn(buttonVariants(), "self-end")}
+            to={`/clone-kahoot/${gameId}/admin/activeGame`}
+            className={cn(buttonVariants(), 'self-end')}
           >
             Start this quiz
           </Link>

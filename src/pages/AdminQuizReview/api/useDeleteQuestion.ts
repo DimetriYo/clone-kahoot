@@ -1,9 +1,9 @@
-import { axiosInstance } from "@/constants"
-import { AcceptedAnswer } from "@/types/AcceptedAnswer"
-import { Question } from "@/types/question"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { AxiosError } from "axios"
-import { toast } from "react-toastify"
+import { axiosInstance } from '@/constants'
+import { AcceptedAnswer } from '@/types/AcceptedAnswer'
+import { Question } from '@/types/Question'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+import { toast } from 'react-toastify'
 
 const deleteQuestion = async (questionId: string) => {
   const query = new URLSearchParams({ questionId })
@@ -26,13 +26,13 @@ export const useDeleteQuestion = (handleSuccess: () => void) => {
     mutationFn: (questionId: string) => deleteQuestion(questionId),
     onSuccess: ([deletedQuestion]: [Question, AcceptedAnswer[]]) => {
       queryClient.invalidateQueries({
-        queryKey: ["question", deletedQuestion.id],
+        queryKey: ['question', deletedQuestion.id],
       })
       queryClient.invalidateQueries({
-        queryKey: ["questions", deletedQuestion.gameId],
+        queryKey: ['questions', deletedQuestion.gameId],
       })
       queryClient.invalidateQueries({
-        queryKey: ["accepted-answers", deletedQuestion.id],
+        queryKey: ['accepted-answers', deletedQuestion.id],
       })
 
       handleSuccess()
