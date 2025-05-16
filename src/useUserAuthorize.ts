@@ -1,33 +1,38 @@
-import { useEffect, useState } from "react"
-import { axiosInstance, LS_USER_ID_KEY } from "./constants"
-import { toast } from "react-toastify"
-import { useNavigate } from "react-router"
+import { useEffect, useState } from 'react'
+import { axiosInstance, LS_USER_ID_KEY } from './constants'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router'
 
 const getUserData = async (creds: { name: string; password: string }) => {
-  return await axiosInstance
-    .post<{
+  try {
+    return await axiosInstance.post<{
       id: string
       name: string
-    }>("/users/auth", creds)
-    .catch((e) => {
-      if (e.status === 404) {
-        return
-      }
-    })
+    }>('/users/auth', creds)
+  } catch (e: any) {
+    if (e.status === 404) {
+      return
+    }
+
+    toast(e.message)
+  }
 }
 
 const isUserExist = async (userId: string) => {
   try {
     await axiosInstance.get(`/users/${userId}`)
+
     return true
   } catch (e: any) {
+    toast(e.message)
+
     if (e.status === 404) return false
   }
 }
 
 const createNewUser = async (rawUser: { name: string; password: string }) => {
   const newUser = await axiosInstance.post<{ id: string; name: string }>(
-    "/users",
+    '/users',
     rawUser
   )
 
@@ -50,7 +55,7 @@ export const useUserAuthorize = () => {
         return
       }
 
-      navigate("/clone-kahoot/home")
+      navigate('/clone-kahoot/home')
     }
 
     authUser()

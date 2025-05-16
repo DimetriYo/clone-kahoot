@@ -1,11 +1,12 @@
-import { Route, Routes } from "react-router"
-import { Authorisation } from "./pages/Authorisation"
-import { MainWindow } from "./pages/MainWindow"
-import { AdminQuizReview } from "./pages/AdminQuizReview"
-import { Player } from "./pages/Player"
-import { useUserAuthorize } from "./useUserAuthorize"
-import { ActiveQuezWithGameId } from "./pages/AdminActiveQuiz"
-import { Winners } from "./pages/Winners"
+import { Route, Routes } from 'react-router'
+import { Authorisation } from './pages/Authorisation'
+import { MainWindow } from './pages/MainWindow'
+import { AdminQuizReview } from './pages/AdminQuizReview'
+import { Player } from './pages/Player'
+import { useUserAuthorize } from './useUserAuthorize'
+import { ActiveQuezWithGameId } from './pages/AdminActiveQuiz'
+import { Winners } from './pages/Winners'
+import { ActiveGameProvider } from './components/ui/ActiveGameProvider'
 
 export function Router() {
   const { updateUserCredentials } = useUserAuthorize()
@@ -26,7 +27,14 @@ export function Router() {
           path=":gameId/admin/activeGame"
           element={<ActiveQuezWithGameId />}
         />
-        <Route path=":gameId/player" element={<Player />} />
+        <Route
+          path=":gameId/player"
+          element={
+            <ActiveGameProvider>
+              <Player />
+            </ActiveGameProvider>
+          }
+        />
         <Route path=":gameId/player/winners" element={<Winners />} />
       </Route>
     </Routes>

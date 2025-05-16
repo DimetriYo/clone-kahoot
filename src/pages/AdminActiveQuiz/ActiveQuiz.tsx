@@ -1,15 +1,15 @@
-import { QuestionView } from "@/components/ui/QuestionView"
-import { useActiveGame } from "@/lib/useActiveGame"
-import { Players } from "@/components/ui/Players"
-import { Button, buttonVariants } from "@/components/ui/button"
-import { useState } from "react"
-import { WinnersTable } from "@/components/ui/WinnersTable"
-import { cn } from "@/lib/utils"
-import { Link } from "react-router"
+import { QuestionView } from '@/components/ui/QuestionView'
+import { useActiveGame } from '@/lib/useActiveGame'
+import { Players } from '@/components/ui/Players'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { useState } from 'react'
+import { WinnersTable } from '@/components/ui/WinnersTable'
+import { cn } from '@/lib/utils'
+import { Link } from 'react-router'
 
 export function ActiveQuiz({ gameId }: { gameId: string }) {
   const { players, sendMessage, activeQuestion, allQuestions, playerAnswers } =
-    useActiveGame(gameId, true)
+    useActiveGame()
 
   const [isShownCopyConfirmation, setIsShownCopyConfirmation] = useState(false)
   const [isShowWinners, setIsShowWinners] = useState(false)
@@ -28,7 +28,7 @@ export function ActiveQuiz({ gameId }: { gameId: string }) {
     }
 
     sendMessage({
-      type: "SHOW_ANSWERS",
+      type: 'SHOW_ANSWERS',
       payload: { questionId: activeQuestion?.id },
     })
   }
@@ -38,13 +38,13 @@ export function ActiveQuiz({ gameId }: { gameId: string }) {
       return
     }
 
-    sendMessage({ type: "SHOW_WINNERS", payload: null })
+    sendMessage({ type: 'SHOW_WINNERS', payload: null })
 
     setIsShowWinners(true)
   }
 
   const handleStopQuiz = () => {
-    if (sendMessage) sendMessage({ type: "END_GAME", payload: null })
+    if (sendMessage) sendMessage({ type: 'END_GAME', payload: null })
   }
 
   return (
@@ -59,14 +59,14 @@ export function ActiveQuiz({ gameId }: { gameId: string }) {
                 <Button
                   onClick={() =>
                     sendMessage!({
-                      type: "CHANGE_QUESTION",
+                      type: 'CHANGE_QUESTION',
                       payload: { qusetionId: id },
                     })
                   }
                   className={cn(
-                    "w-full truncate",
+                    'w-full truncate',
                     activeQuestion?.id === id &&
-                      buttonVariants({ variant: "secondary" })
+                      buttonVariants({ variant: 'secondary' })
                   )}
                 >
                   Question {index + 1}
@@ -83,7 +83,7 @@ export function ActiveQuiz({ gameId }: { gameId: string }) {
             Copy link for the players
           </Button>
           {isShownCopyConfirmation &&
-            "Link for the players has been copied to your clipboard"}
+            'Link for the players has been copied to your clipboard'}
 
           <Button type="button" onClick={handleShowAnswersClick}>
             Show answers

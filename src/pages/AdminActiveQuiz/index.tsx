@@ -1,5 +1,6 @@
-import { useParams } from "react-router"
-import { ActiveQuiz } from "./ActiveQuiz"
+import { useParams } from 'react-router'
+import { ActiveQuiz } from './ActiveQuiz'
+import { ActiveGameProvider } from '@/components/ui/ActiveGameProvider'
 
 export function ActiveQuezWithGameId() {
   const { gameId } = useParams()
@@ -8,5 +9,9 @@ export function ActiveQuezWithGameId() {
     return null
   }
 
-  return <ActiveQuiz gameId={gameId} />
+  return (
+    <ActiveGameProvider isAdmin>
+      <ActiveQuiz gameId={gameId} />
+    </ActiveGameProvider>
+  )
 }

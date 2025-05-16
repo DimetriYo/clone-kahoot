@@ -1,15 +1,15 @@
-import { Button, buttonVariants } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { DetailedHTMLProps, FormHTMLAttributes, useEffect } from "react"
-import { useForm, SubmitHandler, useFieldArray } from "react-hook-form"
-import { Question } from "@/types/question"
-import { useGetSingleQuestion } from "./api/useGetSingleQuestion"
-import { usePatchUpdateQuestion } from "./api/usePatchUpdateQuestion"
-import { useGetAcceptedAnswersByQuestionId } from "./api/useGetAcceptedAnswersByQuestionId"
-import { usePutUpdateAcceptedAnswers } from "./api/usePutUpdateAcceptedAnswers"
-import { useDeleteQuestion } from "./api/useDeleteQuestion"
-import ImgWithPlaceholder from "@/components/ui/ImgWithPlaceholder"
+import { Button, buttonVariants } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { DetailedHTMLProps, FormHTMLAttributes, useEffect } from 'react'
+import { useForm, SubmitHandler, useFieldArray } from 'react-hook-form'
+import { Question } from '@/types/Question'
+import { useGetSingleQuestion } from './api/useGetSingleQuestion'
+import { usePatchUpdateQuestion } from './api/usePatchUpdateQuestion'
+import { useGetAcceptedAnswersByQuestionId } from './api/useGetAcceptedAnswersByQuestionId'
+import { usePutUpdateAcceptedAnswers } from './api/usePutUpdateAcceptedAnswers'
+import { useDeleteQuestion } from './api/useDeleteQuestion'
+import ImgWithPlaceholder from '@/components/ui/ImgWithPlaceholder'
 
 type Props = DetailedHTMLProps<
   FormHTMLAttributes<HTMLFormElement>,
@@ -28,14 +28,14 @@ type Props = DetailedHTMLProps<
   gameId: string
 }
 
-const defaultValues: Pick<Question, "text"> & {
+const defaultValues: Pick<Question, 'text'> & {
   answers: { answerText: string }[]
   id?: string
   img?: string
 } = {
-  text: "",
-  img: "",
-  answers: [{ answerText: "" }],
+  text: '',
+  img: '',
+  answers: [{ answerText: '' }],
 }
 
 export function QuestionConstructor({
@@ -62,7 +62,7 @@ export function QuestionConstructor({
     defaultValues,
   })
 
-  const imageUrl = watch("img")
+  const imageUrl = watch('img')
 
   const { data: question } = useGetSingleQuestion(
     selectedQuestion.id,
@@ -70,7 +70,7 @@ export function QuestionConstructor({
       question
         ? {
             text: question.text,
-            img: question.img ? question.img : "",
+            img: question.img ? question.img : '',
           }
         : undefined
   )
@@ -92,7 +92,7 @@ export function QuestionConstructor({
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "answers",
+    name: 'answers',
   })
 
   const onSubmit: SubmitHandler<typeof defaultValues> = ({
@@ -101,9 +101,9 @@ export function QuestionConstructor({
     img,
   }) => {
     if (!answers.length) {
-      setError("answers", {
-        type: "required",
-        message: "There should be at least one correct answer",
+      setError('answers', {
+        type: 'required',
+        message: 'There should be at least one correct answer',
       })
       return
     }
@@ -132,7 +132,7 @@ export function QuestionConstructor({
     <div>
       <form {...props} onSubmit={handleSubmit(onSubmit)}>
         <h3 className="text-4xl mt-4">Question #{selectedQuestion.number}</h3>
-        <Input placeholder="Insert image url" {...register("img")} />
+        <Input placeholder="Insert image url" {...register('img')} />
 
         {imageUrl && (
           <ImgWithPlaceholder
@@ -147,7 +147,7 @@ export function QuestionConstructor({
         <Label className="flex flex-col">
           <Input
             placeholder="Type in question text"
-            {...register("text", { required: "Question text must present" })}
+            {...register('text', { required: 'Question text must present' })}
           />
           {errors.text && (
             <p className="self-start text-red-400">{errors.text.message}</p>
@@ -168,7 +168,7 @@ export function QuestionConstructor({
                   <Input
                     placeholder="Accepted answer"
                     {...register(`answers.${index}.answerText`, {
-                      required: "Empty answer is not accepted",
+                      required: 'Empty answer is not accepted',
                     })}
                   />
                   {errors.answers && errors.answers[index] && (
@@ -188,8 +188,8 @@ export function QuestionConstructor({
             type="button"
             className="w-50"
             onClick={() => {
-              clearErrors("answers")
-              append({ answerText: "" })
+              clearErrors('answers')
+              append({ answerText: '' })
             }}
           >
             Add one more answer
@@ -197,7 +197,7 @@ export function QuestionConstructor({
         </section>
 
         <Button
-          className={buttonVariants({ variant: "default" })}
+          className={buttonVariants({ variant: 'default' })}
           type="submit"
         >
           Add (update) question to the Quiz

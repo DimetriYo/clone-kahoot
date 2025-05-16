@@ -1,8 +1,8 @@
-import { axiosInstance } from "@/constants"
-import { Question } from "@/types/question"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { AxiosError } from "axios"
-import { toast } from "react-toastify"
+import { axiosInstance } from '@/constants'
+import { Question } from '@/types/Question'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+import { toast } from 'react-toastify'
 
 export const patchUpdateQuestion = async ({ id, ...question }: Question) => {
   const questionData = await axiosInstance.put<Question>(
@@ -21,7 +21,7 @@ export const usePatchUpdateQuestion = () => {
       patchUpdateQuestion(updatedQuestion),
     onSuccess: (updatedQuestion) => {
       queryClient.invalidateQueries({
-        queryKey: ["question", updatedQuestion.id],
+        queryKey: ['question', updatedQuestion.id],
       })
     },
     onError: (e) => {

@@ -1,12 +1,12 @@
-import { axiosInstance } from "@/constants"
-import { Question, RawQuestion } from "@/types/question"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { AxiosError } from "axios"
-import { toast } from "react-toastify"
+import { axiosInstance } from '@/constants'
+import { Question, RawQuestion } from '@/types/Question'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
+import { toast } from 'react-toastify'
 
 export const postNewQuestion = async (rawQuestion: RawQuestion) => {
   const newQuestionData = await axiosInstance.post<Question>(
-    "/questions",
+    '/questions',
     rawQuestion
   )
 
@@ -34,7 +34,7 @@ export const usePostNewQuestion = (
     mutationFn: (rawQuestion: RawQuestion) => createNewQuestion(rawQuestion),
     onSuccess: (newQuestion) => {
       queryClient.invalidateQueries({
-        queryKey: ["questions", newQuestion.gameId],
+        queryKey: ['questions', newQuestion.gameId],
       })
 
       if (handleSuccess) {

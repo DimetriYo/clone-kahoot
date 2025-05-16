@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/react-query"
-import { Question } from "@/types/question"
-import { axiosInstance } from "@/constants"
-import { AxiosError } from "axios"
-import { toast } from "react-toastify"
+import { useQuery } from '@tanstack/react-query'
+import { Question } from '@/types/Question'
+import { axiosInstance } from '@/constants'
+import { AxiosError } from 'axios'
+import { toast } from 'react-toastify'
 
 export const getQuestionById = async (questionId: string) => {
   try {
@@ -28,7 +28,7 @@ export const useGetSingleQuestion = <T = Question>(
 ) =>
   useQuery({
     enabled: Boolean(questionId),
-    queryKey: ["question", questionId],
+    queryKey: ['question', questionId],
     queryFn: () => getQuestionById(questionId!),
     select,
   })
