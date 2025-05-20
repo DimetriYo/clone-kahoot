@@ -13,9 +13,11 @@ import {
 } from '@/constants'
 import { toast } from 'react-toastify'
 import { UserAvatar } from '@/components/ui/UserAvatar'
+import { useQueryClient } from '@tanstack/react-query'
 
 export function MainWindow() {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const { data: games } = useGetGames()
 
   const { mutate: postNewGame } = usePostAddNewGame({
@@ -55,6 +57,8 @@ export function MainWindow() {
       ' domain=' +
       DOMAIN +
       ';'
+
+    queryClient.invalidateQueries({ queryKey: ['games'] })
 
     navigate('/clone-kahoot/')
   }

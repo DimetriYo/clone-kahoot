@@ -35,7 +35,14 @@ export function Router() {
             </ActiveGameProvider>
           }
         />
-        <Route path=":gameId/player/winners" element={<Winners />} />
+        <Route
+          path=":gameId/player/winners"
+          element={
+            <ActiveGameProvider>
+              <Winners />
+            </ActiveGameProvider>
+          }
+        />
       </Route>
     </Routes>
   )

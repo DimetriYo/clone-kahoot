@@ -1,25 +1,25 @@
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Players } from "@/components/ui/Players"
-import { QuestionView } from "@/components/ui/QuestionView"
-import { LS_USER_ID_KEY } from "@/constants"
-import { useActiveGame } from "@/lib/useActiveGame"
-import { useEffect, useState } from "react"
-import { useForm } from "react-hook-form"
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Players } from '@/components/ui/Players'
+import { QuestionView } from '@/components/ui/QuestionView'
+import { LS_USER_ID_KEY } from '@/constants'
+import { useActiveGame } from '@/lib/useActiveGame'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 type UserAnswer = { answer: string }
-const defaultValues = { answer: "" }
+const defaultValues = { answer: '' }
 
 export function Player() {
   const { activeQuestion, players, sendMessage, playerAnswers } =
-    useActiveGame("")
+    useActiveGame()
   const [isQuestionAnswered, setIsQuestionAnswered] = useState(false)
 
   const sendAnswerQuestion = (answer: any) => {
     const playerId = localStorage.getItem(LS_USER_ID_KEY)
 
     sendMessage!({
-      type: "ANSWER_QUESTION",
+      type: 'ANSWER_QUESTION',
       payload: { questionId: activeQuestion?.id, answer, playerId },
     })
   }
@@ -47,7 +47,7 @@ export function Player() {
       ({ questionId }) => activeQuestion && questionId === activeQuestion.id
     )
 
-    reset({ answer: currentAnswer?.text || "" })
+    reset({ answer: currentAnswer?.text || '' })
 
     setIsQuestionAnswered(Boolean(currentAnswer))
   }, [activeQuestion])
@@ -66,7 +66,7 @@ export function Player() {
           aria-invalid={Boolean(errors.answer)}
           placeholder="Type your answer here!"
           disabled={isQuestionAnswered}
-          {...register("answer", { required: "You can't submit empty answer" })}
+          {...register('answer', { required: "You can't submit empty answer" })}
           type="text"
         />
         {errors.answer && (

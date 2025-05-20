@@ -6,7 +6,7 @@ export function QuestionView({ text, img }: Pick<Question, 'img' | 'text'>) {
     <>
       {img && (
         <ImgWithPlaceholder
-          className="flex flex-col items-center gap-4 rounded-lg"
+          className="flex flex-col items-center gap-4 rounded-lg mx-auto"
           src={img}
           alt={`Image illustrating the question: ${text}`}
         />
